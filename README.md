@@ -314,12 +314,12 @@ python flask_server.py --port 5001
 
 ## License
 
-Specify your project license here (MIT, Apache 2.0, etc.)
+No license
 
 ## Contact & Support
 
 For questions or issues, please contact the project maintainer.
-
+You can create issues ..
 ---
 
 **Last Updated:** 2026-06-22
