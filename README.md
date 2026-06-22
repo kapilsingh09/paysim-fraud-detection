@@ -271,6 +271,168 @@ def predict_batch():
 - Implement CI/CD pipelines
 - Add logging and monitoring
 
+## Docker Setup & Deployment
+
+### Prerequisites
+- Docker installed on your system ([Install Docker](https://docs.docker.com/get-docker/))
+
+### Project Structure for Docker
+```
+Fraud_detection_paysim/
+├── Dockerfile                   # Docker configuration file
+├── flask_server.py              # Main Flask application
+├── fraud_detection_PaySim.ipynb  # Jupyter notebook with model training pipeline
+├── model.pkl                     # Pre-trained model (binary classification)
+├── model_features.pkl            # Feature column names for alignment
+├── requriment.txt                # Python dependencies
+├── templates/
+│   └── index.html               # Web interface
+└── README.md                    # Project documentation
+```
+
+### Building the Docker Image
+
+Navigate to the project directory and build the Docker image:
+
+```bash
+docker build -t fraud-detection:latest .
+```
+
+**Build Output:**
+- Image name: `fraud-detection`
+- Tag: `latest`
+- Size: ~800-900 MB (includes Python 3.10 slim base)
+
+### Running the Docker Container
+
+#### Option 1: Basic Run
+```bash
+docker run -p 5000:5000 fraud-detection:latest
+```
+
+#### Option 2: Detached Mode (Background)
+```bash
+docker run -d -p 5000:5000 --name fraud-app fraud-detection:latest
+```
+
+#### Option 3: With Volume Mounting (for development)
+```bash
+docker run -p 5000:5000 -v $(pwd):/app fraud-detection:latest
+```
+
+After running, access the application at: **http://localhost:5000**
+
+### Verifying the Container
+
+Check if the container is running:
+```bash
+docker ps
+```
+
+View container logs:
+```bash
+docker logs fraud-app
+```
+
+### Stopping & Removing the Container
+
+Stop the container:
+```bash
+docker stop fraud-app
+```
+
+Remove the container:
+```bash
+docker rm fraud-app
+```
+
+### Dockerfile Details
+
+The Dockerfile includes:
+- **Base Image:** `python:3.10-slim` (lightweight Python environment)
+- **Working Directory:** `/app` (all files copied here)
+- **Dependencies Installation:** Installs system dependencies and Python packages
+- **Port Exposure:** Port 5000 for Flask application
+- **Environment Variables:** 
+  - `FLASK_APP=flask_server.py`
+  - `FLASK_ENV=production`
+- **Entry Point:** Runs `python flask_server.py` on container start
+
+### Troubleshooting Docker Issues
+
+**Issue:** "Cannot find model.pkl or model_features.pkl"
+- **Solution:** Ensure both files are in the project directory before building
+- Verify with: `ls model.pkl model_features.pkl`
+
+**Issue:** "Port 5000 already in use"
+- **Solution:** Map to a different port
+```bash
+docker run -p 8000:5000 fraud-detection:latest
+# Access at http://localhost:8000
+```
+
+**Issue:** "ModuleNotFoundError"
+- **Solution:** Rebuild the image if requirements.txt was updated
+```bash
+docker build --no-cache -t fraud-detection:latest .
+```
+
+**Issue:** Container exits immediately
+- **Solution:** Check logs for errors
+```bash
+docker logs fraud-app
+```
+
+### Docker Compose (Optional)
+
+For multi-container setups or easier management, create a `docker-compose.yml`:
+
+```yaml
+version: '3.8'
+
+services:
+  fraud-detection:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+    volumes:
+      - ./model.pkl:/app/model.pkl:ro
+      - ./model_features.pkl:/app/model_features.pkl:ro
+    restart: unless-stopped
+```
+
+Run with Docker Compose:
+```bash
+docker-compose up -d
+```
+
+Stop with Docker Compose:
+```bash
+docker-compose down
+```
+
+### Deployment to Cloud Platforms
+
+#### AWS (ECS or EC2)
+1. Push image to Amazon ECR
+2. Create ECS task definition
+3. Launch service with auto-scaling
+
+#### Google Cloud (Cloud Run)
+```bash
+docker tag fraud-detection:latest gcr.io/PROJECT_ID/fraud-detection:latest
+docker push gcr.io/PROJECT_ID/fraud-detection:latest
+gcloud run deploy fraud-detection --image gcr.io/PROJECT_ID/fraud-detection:latest
+```
+
+#### Azure (Container Instances)
+```bash
+docker tag fraud-detection:latest yourregistry.azurecr.io/fraud-detection:latest
+docker push yourregistry.azurecr.io/fraud-detection:latest
+```
+
 ## Performance Considerations
 
 - Model uses efficient data type conversions (int8, int32, float32)
