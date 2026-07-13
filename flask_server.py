@@ -1,17 +1,32 @@
 import os
+from pathlib import Path
 import joblib
 import pandas as pd
 from flask import Flask, request, render_template, jsonify
 
 app = Flask(__name__)
 
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_PATH = BASE_DIR / 'fraud_model.pkl'
+FEATURE_COLUMNS_PATH = BASE_DIR / 'feature_columns.pkl'
+
 # Load your model and saved training feature names safely
+model = None
+final_columns = []
+
 try:
-    model = joblib.load('model.pkl')
-    # Save your X_train.columns from colab as a list and load it here
-    final_columns = joblib.load('model_features.pkl') 
+    if MODEL_PATH.exists():
+        model = joblib.load(MODEL_PATH)
+    else:
+        raise FileNotFoundError(f"Model file not found: {MODEL_PATH}")
+
+    if FEATURE_COLUMNS_PATH.exists():
+        final_columns = joblib.load(FEATURE_COLUMNS_PATH)
+    else:
+        raise FileNotFoundError(f"Feature columns file not found: {FEATURE_COLUMNS_PATH}")
 except Exception as e:
     print(f"Error loading model files: {e}")
+    model = None
     final_columns = []
 
 def predict_fraud(new_data_df, model):
@@ -67,6 +82,9 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    if model is None:
+        return jsonify({'success': False, 'error': 'Model is not available. Check the project files.'}), 500
+
     try:
         # Extract inputs from form and parse types correctly
         input_data = {
