@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fraud Detection Analyzer</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Caveat:wght@400..700&family=Architects+Daughter&display=swap" rel="stylesheet">
+    <!-- We're adding 'Nunito' for very readable, friendly text in the expander -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Caveat:wght@400..700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
     <script>
@@ -25,7 +26,7 @@
                     fontFamily: {
                         sans: ['Fredoka', 'sans-serif'],
                         hand: ['Caveat', 'cursive'],
-                        sketch: ['"Architects Daughter"', 'cursive'],
+                        readable: ['Nunito', 'sans-serif'],
                     }
                 }
             }
@@ -33,7 +34,7 @@
     </script>
     <style>
         .notebook-grid {
-            background-color: #efebe0; /* Removed grid pattern, solid background */
+            background-color: #efebe0;
             color: #1f2937;
         }
 
@@ -71,9 +72,9 @@
     <!-- Navbar -->
     <nav class="w-full bg-paperMain border-b border-gray-300 py-3 px-6 md:px-12 flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-2 text-2xl font-sans font-bold tracking-wide text-gray-800">
-            <i class="fa-solid fa-shield-cat text-3xl text-doodleBlue"></i> SentinelAI
+            Fraud Detection Analyzer
         </div>
-        <!-- Cat Profile Image (Removed the extra text links) -->
+        <!-- Cat Profile Image -->
         <div class="flex items-center">
             <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden shadow-sm">
                 <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=100&h=100&q=80" alt="Cat Profile" class="w-full h-full object-cover">
@@ -219,9 +220,9 @@
                 <!-- Right Column: Results Area -->
                 <div id="right-panel" class="w-full lg:w-48 xl:w-64 shrink-0 h-full flex flex-col justify-start transition-all duration-300">
                     
-                    <!-- Waiting / Placeholder State with Cat Icon (Small when empty) -->
+                    <!-- Waiting / Placeholder State with Cat Image -->
                     <div id="waiting-state" class="flex flex-col items-center justify-center py-10 px-4 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 h-full min-h-[300px]">
-                        <i class="fa-solid fa-cat text-5xl text-gray-400 mb-4 drop-shadow-sm"></i>
+                        <img id="waiting-cat-img" src="" alt="Awaiting Data Cat" class="w-24 h-24 object-cover rounded-full border-4 border-white shadow-md mb-4 transition-opacity duration-300">
                         <h2 class="font-sans font-bold text-lg text-gray-600 mb-2 text-center">Awaiting Data...</h2>
                     </div>
 
@@ -234,7 +235,7 @@
                     </div>
 
                     <!-- Result Section Container -->
-                    <div id="result-container" class="transition-none hidden">
+                    <div id="result-container" class="transition-none hidden h-full">
                         <!-- Results will be injected here -->
                     </div>
                 </div>
@@ -243,22 +244,51 @@
         </div>
 
         <!-- Expandable Vocabulary Section -->
-        <details class="w-full bg-paperMain doodle-border doodle-shadow rounded-2xl p-4 md:p-6 mb-8 group cursor-pointer">
-            <summary class="font-sans font-bold text-lg text-gray-800 list-none flex items-center justify-between focus:outline-none">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-book-open text-doodleBlue"></i> Dataset Vocabulary & Features</span>
+        <details class="w-full bg-paperMain doodle-border doodle-shadow rounded-2xl p-6 md:p-8 mb-8 group cursor-pointer">
+            <summary class="font-sans font-bold text-xl text-gray-900 list-none flex items-center justify-between focus:outline-none bg-gray-50 p-4 rounded-xl border border-gray-200 hover:bg-gray-100 transition-colors">
+                <span class="flex items-center gap-3"><i class="fa-solid fa-book-open text-doodleBlue text-2xl"></i> Learn the Dataset Features</span>
                 <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-gray-500"></i>
             </summary>
-            <div class="mt-4 pt-4 border-t border-gray-200 text-sm font-sans text-gray-700 space-y-3 cursor-auto">
-                <p>This analyzer uses features derived from the <a href="https://www.kaggle.com/datasets/ealaxi/paysim1" target="_blank" class="text-blue-600 hover:underline font-bold">PaySim synthetic dataset</a>. Here is the vocabulary for the input fields:</p>
-                <ul class="list-disc pl-5 space-y-2">
-                    <li><strong>step</strong>: Maps a unit of time in the real world. In this case, 1 step is 1 hour of time. Total steps 744 (31 days simulation).</li>
-                    <li><strong>type</strong>: The type of transaction (CASH-IN, CASH-OUT, DEBIT, PAYMENT and TRANSFER).</li>
-                    <li><strong>amount</strong>: The amount of the transaction in local currency.</li>
-                    <li><strong>oldbalanceOrg</strong>: Initial balance of the origin account (Sender) before the transaction.</li>
-                    <li><strong>newbalanceOrig</strong>: New balance of the origin account (Sender) after the transaction.</li>
-                    <li><strong>oldbalanceDest</strong>: Initial balance of the destination account (Receiver) before the transaction.</li>
-                    <li><strong>newbalanceDest</strong>: New balance of the destination account (Receiver) after the transaction.</li>
-                </ul>
+            
+            <div class="mt-6 pt-6 border-t border-gray-200 text-base font-readable text-gray-700 space-y-6 cursor-auto leading-relaxed">
+                
+                <p class="text-lg bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <i class="fa-solid fa-circle-info text-yellow-500 mr-2"></i>
+                    This analyzer uses features derived from the <a href="https://www.kaggle.com/datasets/ealaxi/paysim1" target="_blank" class="text-blue-600 hover:underline font-bold">PaySim synthetic dataset</a>. Below is an easy-to-understand explanation of every input field so you can learn how financial transactions are recorded for fraud detection.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                        <h4 class="font-bold text-gray-900 mb-2 text-lg"><i class="fa-solid fa-clock text-gray-400 mr-2"></i> Step (Time)</h4>
+                        <p>The time step of the transaction. In this simulation, <strong>1 step equals exactly 1 hour</strong> of real-world time. The entire dataset spans 744 steps, which perfectly represents exactly 31 days (one full month) of simulated financial transactions.</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                        <h4 class="font-bold text-gray-900 mb-2 text-lg"><i class="fa-solid fa-money-bill-transfer text-gray-400 mr-2"></i> Transaction Type</h4>
+                        <p>The specific method used to move money. This can be one of five categories: CASH-IN (depositing money), CASH-OUT (withdrawing cash), DEBIT (using a card), PAYMENT (paying a bill), or TRANSFER. <em>Note: Fraudulent activities are overwhelmingly found within the TRANSFER and CASH-OUT types.</em></p>
+                    </div>
+
+                    <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 md:col-span-2">
+                        <h4 class="font-bold text-gray-900 mb-2 text-lg"><i class="fa-solid fa-dollar-sign text-green-500 mr-2"></i> Amount</h4>
+                        <p>The exact monetary value of the transaction in the local currency. Fraudulent transactions often involve unusually large amounts, or amounts that perfectly match the victim's total account balance to completely drain it in one go (known as an 'account sweep').</p>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                        <h4 class="font-bold text-blue-900 mb-2 text-lg"><i class="fa-solid fa-user-minus text-blue-500 mr-2"></i> Sender's Balances (Origin)</h4>
+                        <ul class="list-disc pl-5 space-y-2 text-blue-800">
+                            <li><strong>Balance Before (oldbalanceOrg):</strong> The starting balance of the sender's account immediately <em>before</em> this specific transaction took place.</li>
+                            <li><strong>Balance After (newbalanceOrig):</strong> The updated balance of the sender's account right <em>after</em> the transaction is completed. For a normal transfer, this should perfectly equal the old balance minus the transaction amount.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-pink-50 p-5 rounded-xl border border-pink-200">
+                        <h4 class="font-bold text-pink-900 mb-2 text-lg"><i class="fa-solid fa-user-plus text-pink-500 mr-2"></i> Receiver's Balances (Destination)</h4>
+                        <ul class="list-disc pl-5 space-y-2 text-pink-800">
+                            <li><strong>Balance Before (oldbalanceDest):</strong> The starting balance of the receiver's account immediately <em>before</em> they received the money.</li>
+                            <li><strong>Balance After (newbalanceDest):</strong> The updated balance of the receiver's account right <em>after</em> the transaction is completed. For a normal transfer, this should perfectly equal the old balance plus the transaction amount.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </details>
 
@@ -279,6 +309,24 @@
     </footer>
 
     <script>
+        // Array of cute cat images for the right-side waiting state
+        const randomCats = [
+            "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=400&h=400&q=80",
+            "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=400&h=400&q=80",
+            "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=400&h=400&q=80",
+            "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&w=400&h=400&q=80",
+            "https://images.unsplash.com/photo-1513360309081-36f5e878fc9e?auto=format&fit=crop&w=400&h=400&q=80",
+            "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=400&h=400&q=80"
+        ];
+        
+        let currentCatUrl = "";
+
+        // Pick a random cat on load
+        window.addEventListener('DOMContentLoaded', () => {
+            currentCatUrl = randomCats[Math.floor(Math.random() * randomCats.length)];
+            document.getElementById('waiting-cat-img').src = currentCatUrl;
+        });
+
         // PaySim Scenarios
         const scenarios = {
             fraud1: { step: 187, type: 'TRANSFER', amount: 481572.00, oldbalanceOrg: 481572.00, newbalanceOrig: 0.00, oldbalanceDest: 0.00, newbalanceDest: 0.00 },
@@ -366,7 +414,7 @@
 
                     if (isFraud) {
                         resultContainer.innerHTML = `
-                            <div class="bg-red-50 p-5 border-2 border-red-300 rounded-2xl shadow-md relative overflow-hidden h-full flex flex-col justify-center">
+                            <div class="bg-red-50 p-5 border-2 border-red-300 rounded-2xl shadow-md relative overflow-hidden h-full flex flex-col justify-start">
                                 <div class="absolute right-[-10px] top-[-10px] text-8xl opacity-5 pointer-events-none text-red-700"><i class="fa-solid fa-triangle-exclamation"></i></div>
                                 <h2 class="text-xl font-bold mb-3 flex items-center gap-2 text-red-600">
                                     <i class="fa-solid fa-shield-virus"></i> NOT SAFE (FRAUD)
@@ -375,15 +423,19 @@
                                     <span class="block text-red-800 font-bold uppercase tracking-wider text-[10px] mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> Fraud Probability</span>
                                     <span class="text-4xl font-sans font-black text-red-600 drop-shadow-sm">${score}%</span>
                                 </div>
-                                <div class="bg-white/80 p-3 rounded-xl border border-red-200 mt-auto">
+                                <div class="bg-white/80 p-3 rounded-xl border border-red-200 mb-4">
                                     <span class="font-bold text-[10px] uppercase tracking-wider text-red-600 mb-2 block"><i class="fa-solid fa-list-check mr-1"></i> Why It's Flagged:</span>
                                     ${flagListHtml}
+                                </div>
+                                <!-- Cat image injected into the free space at the bottom -->
+                                <div class="mt-auto flex justify-center opacity-70">
+                                    <img src="${currentCatUrl}" alt="Cat Companion" class="w-16 h-16 object-cover rounded-full border-2 border-red-300 shadow-sm">
                                 </div>
                             </div>
                         `;
                     } else {
                         resultContainer.innerHTML = `
-                            <div class="bg-green-50 p-5 border-2 border-green-300 rounded-2xl shadow-md relative overflow-hidden h-full flex flex-col justify-center">
+                            <div class="bg-green-50 p-5 border-2 border-green-300 rounded-2xl shadow-md relative overflow-hidden h-full flex flex-col justify-start">
                                 <div class="absolute right-[-10px] top-[-10px] text-8xl opacity-5 pointer-events-none text-green-700"><i class="fa-solid fa-shield-check"></i></div>
                                 <h2 class="text-xl font-bold mb-3 flex items-center gap-2 text-green-600">
                                     <i class="fa-solid fa-check-circle"></i> SAFE
@@ -392,9 +444,13 @@
                                     <span class="block text-green-800 font-bold uppercase tracking-wider text-[10px] mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> Risk Probability</span>
                                     <span class="text-4xl font-sans font-black text-green-600 drop-shadow-sm">${score}%</span>
                                 </div>
-                                <div class="bg-white/80 p-3 rounded-xl border border-green-200 mt-auto">
+                                <div class="bg-white/80 p-3 rounded-xl border border-green-200 mb-4">
                                     <span class="font-bold text-[10px] uppercase tracking-wider text-green-600 mb-2 block"><i class="fa-solid fa-list-check mr-1"></i> Positive Signals:</span>
                                     ${flagListHtml}
+                                </div>
+                                <!-- Cat image injected into the free space at the bottom -->
+                                <div class="mt-auto flex justify-center opacity-70">
+                                    <img src="${currentCatUrl}" alt="Cat Companion" class="w-16 h-16 object-cover rounded-full border-2 border-green-300 shadow-sm">
                                 </div>
                             </div>
                         `;
