@@ -77,7 +77,7 @@
         <!-- Cat Profile Image -->
         <div class="flex items-center">
             <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden shadow-sm">
-                <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=100&h=100&q=80" alt="Cat Profile" class="w-full h-full object-cover">
+                <img id="navbar-cat-img" src="https://cataas.com/cat?width=100&height=100" alt="Cat Profile" class="w-full h-full object-cover">
             </div>
         </div>
     </nav>
@@ -298,7 +298,7 @@
     <footer class="w-full bg-paperMain border-t border-gray-300 py-6 mt-auto">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-8 text-sm font-sans text-gray-500">
             <div class="mb-4 md:mb-0">
-                <span><i class="fa-solid fa-copyright"></i> 2026 SentinelAI</span>
+                <span><i class="fa-solid fa-copyright"></i> {year} Fraud Detection Analyze</span>
                 <span class="mx-2">•</span>
                 <span><i class="fa-solid fa-database mr-1"></i> <a href="https://www.kaggle.com/datasets/ealaxi/paysim1" target="_blank" class="hover:text-gray-900 hover:underline">PaySim Dataset</a></span>
             </div>
@@ -309,21 +309,13 @@
     </footer>
 
     <script>
-        // Array of cute cat images for the right-side waiting state
-        const randomCats = [
-            "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=400&h=400&q=80",
-            "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=400&h=400&q=80",
-            "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=400&h=400&q=80",
-            "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&w=400&h=400&q=80",
-            "https://images.unsplash.com/photo-1513360309081-36f5e878fc9e?auto=format&fit=crop&w=400&h=400&q=80",
-            "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=400&h=400&q=80"
-        ];
+        const randomCat = "https://cataas.com/cat?width=400&height=400";
         
         let currentCatUrl = "";
 
-        // Pick a random cat on load
+        // Load a fresh CATAAS cat image on page load
         window.addEventListener('DOMContentLoaded', () => {
-            currentCatUrl = randomCats[Math.floor(Math.random() * randomCats.length)];
+            currentCatUrl = randomCat;
             document.getElementById('waiting-cat-img').src = currentCatUrl;
         });
 
