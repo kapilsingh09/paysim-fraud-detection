@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Caveat:wght@400..700&family=Architects+Daughter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#efebe0', 
+                        doodleYellow: '#eab308',
+                        doodlePink: '#f472b6',
+                        doodleGreen: '#34d399',
+                        doodleRed: '#f87171',
+                        doodleBlue: '#38bdf8',
+                        paperMain: '#ffffff',
+                        paperRuled: '#fbf9f1'
+                    },
+                    fontFamily: {
+                        sans: ['Fredoka', 'sans-serif'],
+                        hand: ['Caveat', 'cursive'],
+                        sketch: ['"Architects Daughter"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .notebook-grid {
+            background-color: #efebe0; /* Removed grid pattern, solid background */
+            color: #1f2937;
+        }
+
+        .doodle-border {
+            border: 3px solid #1f2937;
+        }
+
+        .doodle-shadow {
+            box-shadow: 6px 6px 0px #1f2937;
+        }
+
+        .input-sketch {
+            background: transparent;
+            border-bottom: 2px dashed #94a3b8;
+            outline: none;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.05rem;
+            color: #1f2937;
+            padding: 6px 10px;
+            transition: border-color 0.2s;
+        }
+        .input-sketch:focus {
+            border-bottom: 2px solid #3b82f6;
+            background: rgba(255,255,255,0.5);
+        }
+        
+        select.input-sketch option {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body class="notebook-grid min-h-screen flex flex-col selection:bg-doodlePink select-none">
+
+    <!-- Navbar -->
+    <nav class="w-full bg-paperMain border-b border-gray-300 py-3 px-6 md:px-12 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2 text-2xl font-sans font-bold tracking-wide text-gray-800">
+            <i class="fa-solid fa-shield-cat text-3xl text-doodleBlue"></i> SentinelAI
+        </div>
+        <!-- Cat Profile Image (Removed the extra text links) -->
+        <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full border-2 border-gray-800 overflow-hidden shadow-sm">
+                <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=100&h=100&q=80" alt="Cat Profile" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="flex-grow w-full max-w-[1400px] mx-auto flex flex-col items-center p-4 md:p-8 mt-4">
+        
+        <!-- Main Card -->
+        <div class="w-full bg-paperMain doodle-border doodle-shadow rounded-3xl p-6 md:p-8 mb-8 relative">
+            
+            <!-- Title -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-sans font-bold tracking-tight mb-2 text-gray-900">
+                    Fraud Detection Analyzer
+                </h1>
+            </div>
+
+            <!-- 3-Column Flex Layout -->
+            <div class="flex flex-col lg:flex-row gap-8 w-full items-start">
+                
+                <!-- Left Column: Test Scenarios -->
+                <div class="w-full lg:w-64 shrink-0">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-gray-600 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb text-yellow-500"></i> Test Scenarios
+                    </h3>
+                    <div class="flex flex-col gap-3">
+                        <!-- Safe Templates -->
+                        <div onclick="loadScenario('safe1')" class="cursor-pointer bg-green-50 border-2 border-green-200 hover:border-green-400 p-2 rounded-xl transition-colors">
+                            <span class="font-bold text-[10px] bg-green-200 text-green-800 px-2 py-0.5 rounded-full block w-fit mb-1">SAFE</span>
+                            <h4 class="font-sans font-medium text-xs text-gray-800">Regular Bill Payment</h4>
+                        </div>
+                        <div onclick="loadScenario('safe2')" class="cursor-pointer bg-green-50 border-2 border-green-200 hover:border-green-400 p-2 rounded-xl transition-colors">
+                            <span class="font-bold text-[10px] bg-green-200 text-green-800 px-2 py-0.5 rounded-full block w-fit mb-1">SAFE</span>
+                            <h4 class="font-sans font-medium text-xs text-gray-800">Salary Transfer</h4>
+                        </div>
+                        <div onclick="loadScenario('safe3')" class="cursor-pointer bg-green-50 border-2 border-green-200 hover:border-green-400 p-2 rounded-xl transition-colors">
+                            <span class="font-bold text-[10px] bg-green-200 text-green-800 px-2 py-0.5 rounded-full block w-fit mb-1">SAFE</span>
+                            <h4 class="font-sans font-medium text-xs text-gray-800">Small Cash-In</h4>
+                        </div>
+                        <!-- Fraud Templates -->
+                        <div onclick="loadScenario('fraud1')" class="cursor-pointer bg-red-50 border-2 border-red-200 hover:border-red-400 p-2 rounded-xl transition-colors">
+                            <span class="font-bold text-[10px] bg-red-200 text-red-800 px-2 py-0.5 rounded-full block w-fit mb-1">FRAUD</span>
+                            <h4 class="font-sans font-medium text-xs text-gray-800">Account Drain Transfer</h4>
+                        </div>
+                        <div onclick="loadScenario('fraud2')" class="cursor-pointer bg-red-50 border-2 border-red-200 hover:border-red-400 p-2 rounded-xl transition-colors">
+                            <span class="font-bold text-[10px] bg-red-200 text-red-800 px-2 py-0.5 rounded-full block w-fit mb-1">FRAUD</span>
+                            <h4 class="font-sans font-medium text-xs text-gray-800">Midnight Cash-Out</h4>
+                        </div>
+                        <div onclick="loadScenario('fraud3')" class="cursor-pointer bg-red-50 border-2 border-red-200 hover:border-red-400 p-2 rounded-xl transition-colors">
+                            <span class="font-bold text-[10px] bg-red-200 text-red-800 px-2 py-0.5 rounded-full block w-fit mb-1">FRAUD</span>
+                            <h4 class="font-sans font-medium text-xs text-gray-800">Mule Account Sweep</h4>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Center Column: Input Form -->
+                <div class="flex-grow w-full">
+                    <form id="prediction-form" action="/predict" method="POST" class="space-y-6">
+                        
+                        <!-- Form Inputs Container -->
+                        <div class="relative rounded-2xl overflow-hidden doodle-border bg-paperRuled p-1 shadow-sm">
+                            <div class="flex items-center px-4 py-3 bg-yellow-100 border-b-2 border-gray-800">
+                                <div class="flex space-x-2">
+                                    <span class="w-3 h-3 rounded-full bg-red-400 border border-gray-800"></span>
+                                    <span class="w-3 h-3 rounded-full bg-yellow-400 border border-gray-800"></span>
+                                    <span class="w-3 h-3 rounded-full bg-green-400 border border-gray-800"></span>
+                                </div>
+                                <span class="ml-3 text-xs font-mono font-bold text-gray-700 uppercase tracking-wider">
+                                    <i class="fa-solid fa-terminal mr-1"></i> transaction_data.json
+                                </span>
+                            </div>
+
+                            <!-- Input Grid -->
+                            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 bg-paperRuled">
+                                <div>
+                                    <label class="block font-sans font-medium mb-1 text-gray-700 text-sm">
+                                        <i class="fa-regular fa-clock text-gray-500 mr-1"></i> Step (hour 1-743)
+                                    </label>
+                                    <input type="number" id="step" name="step" class="input-sketch w-full" placeholder="e.g. 187" value="1" required>
+                                </div>
+                                <div>
+                                    <label class="block font-sans font-medium mb-1 text-gray-700 text-sm">
+                                        <i class="fa-solid fa-money-bill-transfer text-gray-500 mr-1"></i> Transaction Type
+                                    </label>
+                                    <select id="type" name="type" class="input-sketch w-full" required>
+                                        <option value="TRANSFER">TRANSFER</option>
+                                        <option value="CASH_OUT">CASH_OUT</option>
+                                        <option value="PAYMENT">PAYMENT</option>
+                                        <option value="DEBIT">DEBIT</option>
+                                        <option value="CASH_IN">CASH_IN</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block font-sans font-medium mb-1 text-gray-700 text-sm">
+                                        <i class="fa-solid fa-dollar-sign text-green-600 mr-1"></i> Amount
+                                    </label>
+                                    <input type="number" step="0.01" id="amount" name="amount" class="input-sketch w-full" placeholder="0.00" required>
+                                </div>
+                                
+                                <div class="md:col-span-2 mt-2 text-sm font-sans font-semibold text-blue-700 border-b border-dashed border-gray-400 pb-2">
+                                    <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Origin Account (Sender)
+                                </div>
+                                <div>
+                                    <label class="block font-sans font-medium mb-1 text-gray-600 text-xs">Balance Before</label>
+                                    <input type="number" step="0.01" id="oldbalanceOrg" name="oldbalanceOrg" class="input-sketch w-full" placeholder="0.00" required>
+                                </div>
+                                <div>
+                                    <label class="block font-sans font-medium mb-1 text-gray-600 text-xs">Balance After</label>
+                                    <input type="number" step="0.01" id="newbalanceOrig" name="newbalanceOrig" class="input-sketch w-full" placeholder="0.00" required>
+                                </div>
+                                
+                                <div class="md:col-span-2 mt-2 text-sm font-sans font-semibold text-pink-700 border-b border-dashed border-gray-400 pb-2">
+                                    <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Destination Account (Receiver)
+                                </div>
+                                <div>
+                                    <label class="block font-sans font-medium mb-1 text-gray-600 text-xs">Balance Before</label>
+                                    <input type="number" step="0.01" id="oldbalanceDest" name="oldbalanceDest" class="input-sketch w-full" placeholder="0.00" required>
+                                </div>
+                                <div>
+                                    <label class="block font-sans font-medium mb-1 text-gray-600 text-xs">Balance After</label>
+                                    <input type="number" step="0.01" id="newbalanceDest" name="newbalanceDest" class="input-sketch w-full" placeholder="0.00" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-2">
+                            <button
+                                type="submit"
+                                id="predict-btn"
+                                class="w-full py-4 px-6 bg-doodleYellow text-xl text-gray-900 font-bold rounded-2xl doodle-border flex items-center justify-center gap-2 hover:bg-yellow-400 transition-colors shadow-sm"
+                            >
+                                <i id="btn-icon" class="fa-solid fa-magnifying-glass-chart"></i>
+                                <span id="btn-text">Run Fraud Analysis!</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Column: Results Area -->
+                <div id="right-panel" class="w-full lg:w-48 xl:w-64 shrink-0 h-full flex flex-col justify-start transition-all duration-300">
+                    
+                    <!-- Waiting / Placeholder State with Cat Icon (Small when empty) -->
+                    <div id="waiting-state" class="flex flex-col items-center justify-center py-10 px-4 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 h-full min-h-[300px]">
+                        <i class="fa-solid fa-cat text-5xl text-gray-400 mb-4 drop-shadow-sm"></i>
+                        <h2 class="font-sans font-bold text-lg text-gray-600 mb-2 text-center">Awaiting Data...</h2>
+                    </div>
+
+                    <!-- Loading Indicator -->
+                    <div id="loading-indicator" class="hidden flex-col items-center justify-center py-12 px-4 space-y-4 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 h-full min-h-[300px]">
+                        <div class="relative flex items-center justify-center">
+                            <i class="fa-solid fa-gear fa-spin text-4xl text-doodleBlue"></i>
+                        </div>
+                        <p class="font-sans font-semibold text-sm text-gray-600 text-center" id="loading-msg">Analyzing...</p>
+                    </div>
+
+                    <!-- Result Section Container -->
+                    <div id="result-container" class="transition-none hidden">
+                        <!-- Results will be injected here -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Expandable Vocabulary Section -->
+        <details class="w-full bg-paperMain doodle-border doodle-shadow rounded-2xl p-4 md:p-6 mb-8 group cursor-pointer">
+            <summary class="font-sans font-bold text-lg text-gray-800 list-none flex items-center justify-between focus:outline-none">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-book-open text-doodleBlue"></i> Dataset Vocabulary & Features</span>
+                <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-gray-500"></i>
+            </summary>
+            <div class="mt-4 pt-4 border-t border-gray-200 text-sm font-sans text-gray-700 space-y-3 cursor-auto">
+                <p>This analyzer uses features derived from the <a href="https://www.kaggle.com/datasets/ealaxi/paysim1" target="_blank" class="text-blue-600 hover:underline font-bold">PaySim synthetic dataset</a>. Here is the vocabulary for the input fields:</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>step</strong>: Maps a unit of time in the real world. In this case, 1 step is 1 hour of time. Total steps 744 (31 days simulation).</li>
+                    <li><strong>type</strong>: The type of transaction (CASH-IN, CASH-OUT, DEBIT, PAYMENT and TRANSFER).</li>
+                    <li><strong>amount</strong>: The amount of the transaction in local currency.</li>
+                    <li><strong>oldbalanceOrg</strong>: Initial balance of the origin account (Sender) before the transaction.</li>
+                    <li><strong>newbalanceOrig</strong>: New balance of the origin account (Sender) after the transaction.</li>
+                    <li><strong>oldbalanceDest</strong>: Initial balance of the destination account (Receiver) before the transaction.</li>
+                    <li><strong>newbalanceDest</strong>: New balance of the destination account (Receiver) after the transaction.</li>
+                </ul>
+            </div>
+        </details>
+
+    </div>
+    
+    <!-- Footer -->
+    <footer class="w-full bg-paperMain border-t border-gray-300 py-6 mt-auto">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-8 text-sm font-sans text-gray-500">
+            <div class="mb-4 md:mb-0">
+                <span><i class="fa-solid fa-copyright"></i> 2026 SentinelAI</span>
+                <span class="mx-2">•</span>
+                <span><i class="fa-solid fa-database mr-1"></i> <a href="https://www.kaggle.com/datasets/ealaxi/paysim1" target="_blank" class="hover:text-gray-900 hover:underline">PaySim Dataset</a></span>
+            </div>
+            <div>
+                Built by <a href="https://github.com/kapilsingh09" target="_blank" class="text-blue-600 font-bold tracking-wide hover:underline">kapilsingh09 <i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // PaySim Scenarios
+        const scenarios = {
+            fraud1: { step: 187, type: 'TRANSFER', amount: 481572.00, oldbalanceOrg: 481572.00, newbalanceOrig: 0.00, oldbalanceDest: 0.00, newbalanceDest: 0.00 },
+            fraud2: { step: 463, type: 'CASH_OUT', amount: 292741.50, oldbalanceOrg: 292741.50, newbalanceOrig: 0.00, oldbalanceDest: 60123.00, newbalanceDest: 60123.00 },
+            fraud3: { step: 312, type: 'TRANSFER', amount: 1900000.00, oldbalanceOrg: 1900000.00, newbalanceOrig: 0.00, oldbalanceDest: 0.00, newbalanceDest: 0.00 },
+            safe1: { step: 42, type: 'PAYMENT', amount: 1452.30, oldbalanceOrg: 18700.00, newbalanceOrig: 17247.70, oldbalanceDest: 53400.00, newbalanceDest: 54852.30 },
+            safe2: { step: 168, type: 'TRANSFER', amount: 45000.00, oldbalanceOrg: 97320.00, newbalanceOrig: 52320.00, oldbalanceDest: 2100.00, newbalanceDest: 47100.00 },
+            safe3: { step: 9, type: 'CASH_IN', amount: 850.00, oldbalanceOrg: 14200.00, newbalanceOrig: 13350.00, oldbalanceDest: 3200.00, newbalanceDest: 4050.00 }
+        };
+
+        function loadScenario(key) {
+            const s = scenarios[key];
+            document.getElementById('step').value = s.step;
+            document.getElementById('type').value = s.type;
+            document.getElementById('amount').value = s.amount.toFixed(2);
+            document.getElementById('oldbalanceOrg').value = s.oldbalanceOrg.toFixed(2);
+            document.getElementById('newbalanceOrig').value = s.newbalanceOrig.toFixed(2);
+            document.getElementById('oldbalanceDest').value = s.oldbalanceDest.toFixed(2);
+            document.getElementById('newbalanceDest').value = s.newbalanceDest.toFixed(2);
+        }
+
+        function getFlags() {
+            const flags = [];
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const oldOrg  = parseFloat(document.getElementById('oldbalanceOrg').value) || 0;
+            const newOrg  = parseFloat(document.getElementById('newbalanceOrig').value) || 0;
+            const oldDest = parseFloat(document.getElementById('oldbalanceDest').value) || 0;
+            const newDest = parseFloat(document.getElementById('newbalanceDest').value) || 0;
+            const type    = document.getElementById('type').value;
+
+            if (newOrg === 0 && oldOrg > 0) flags.push("Origin account fully drained to $0.");
+            if (newDest === oldDest && amount > 0 && (type === 'TRANSFER')) flags.push("Destination balance unchanged after a large transfer.");
+            if (amount > 1000000) flags.push("Unusually large transaction amount (above $1M).");
+            if (Math.abs(amount - oldOrg) < 1 && amount > 0) flags.push("Transfer exactly equals the origin balance (full sweep).");
+            if ((type === 'PAYMENT' || type === 'CASH_IN') && amount < 50000) flags.push("Low-risk transaction type and nominal amount.");
+            if (amount > 0 && Math.abs(newOrg - (oldOrg - amount)) < 1 && Math.abs(newDest - (oldDest + amount)) < 1) flags.push("Balances reconcile perfectly—no missing funds.");
+
+            return flags;
+        }
+
+        const form = document.getElementById("prediction-form");
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const rightPanel = document.getElementById("right-panel");
+            const waitingState = document.getElementById("waiting-state");
+            const loadingIndicator = document.getElementById("loading-indicator");
+            const resultContainer = document.getElementById("result-container");
+            
+            // Expand the right panel width slightly when a result is expected
+            rightPanel.classList.remove("lg:w-48", "xl:w-64");
+            rightPanel.classList.add("lg:w-80", "xl:w-96");
+            
+            if (waitingState) waitingState.classList.add("hidden");
+            resultContainer.classList.add("hidden");
+            resultContainer.innerHTML = "";
+            loadingIndicator.classList.remove("hidden");
+            loadingIndicator.classList.add("flex");
+
+            const formData = new FormData(form);
+
+            fetch("/predict", {
+                method: "POST",
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                setTimeout(() => {
+                    loadingIndicator.classList.add("hidden");
+                    loadingIndicator.classList.remove("flex");
+                    
+                    const isFraud = data.is_fraud;
+                    const score = data.risk_score;
+                    const flags = getFlags();
+                    
+                    let flagListHtml = '';
+                    if (flags.length > 0) {
+                        flagListHtml = '<ul class="list-none pl-2 mt-2 space-y-2">';
+                        flags.forEach(f => {
+                            flagListHtml += `<li class="font-sans text-xs text-gray-700 border-l-2 border-gray-400 pl-2"><i class="fa-solid fa-circle-info text-[10px] mr-1 text-gray-500"></i> ${f}</li>`;
+                        });
+                        flagListHtml += '</ul>';
+                    }
+
+                    if (isFraud) {
+                        resultContainer.innerHTML = `
+                            <div class="bg-red-50 p-5 border-2 border-red-300 rounded-2xl shadow-md relative overflow-hidden h-full flex flex-col justify-center">
+                                <div class="absolute right-[-10px] top-[-10px] text-8xl opacity-5 pointer-events-none text-red-700"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                <h2 class="text-xl font-bold mb-3 flex items-center gap-2 text-red-600">
+                                    <i class="fa-solid fa-shield-virus"></i> NOT SAFE (FRAUD)
+                                </h2>
+                                <div class="mb-4 bg-red-100 border border-red-200 p-4 rounded-xl text-center shadow-inner">
+                                    <span class="block text-red-800 font-bold uppercase tracking-wider text-[10px] mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> Fraud Probability</span>
+                                    <span class="text-4xl font-sans font-black text-red-600 drop-shadow-sm">${score}%</span>
+                                </div>
+                                <div class="bg-white/80 p-3 rounded-xl border border-red-200 mt-auto">
+                                    <span class="font-bold text-[10px] uppercase tracking-wider text-red-600 mb-2 block"><i class="fa-solid fa-list-check mr-1"></i> Why It's Flagged:</span>
+                                    ${flagListHtml}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        resultContainer.innerHTML = `
+                            <div class="bg-green-50 p-5 border-2 border-green-300 rounded-2xl shadow-md relative overflow-hidden h-full flex flex-col justify-center">
+                                <div class="absolute right-[-10px] top-[-10px] text-8xl opacity-5 pointer-events-none text-green-700"><i class="fa-solid fa-shield-check"></i></div>
+                                <h2 class="text-xl font-bold mb-3 flex items-center gap-2 text-green-600">
+                                    <i class="fa-solid fa-check-circle"></i> SAFE
+                                </h2>
+                                <div class="mb-4 bg-green-100 border border-green-200 p-4 rounded-xl text-center shadow-inner">
+                                    <span class="block text-green-800 font-bold uppercase tracking-wider text-[10px] mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> Risk Probability</span>
+                                    <span class="text-4xl font-sans font-black text-green-600 drop-shadow-sm">${score}%</span>
+                                </div>
+                                <div class="bg-white/80 p-3 rounded-xl border border-green-200 mt-auto">
+                                    <span class="font-bold text-[10px] uppercase tracking-wider text-green-600 mb-2 block"><i class="fa-solid fa-list-check mr-1"></i> Positive Signals:</span>
+                                    ${flagListHtml}
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    resultContainer.classList.remove("hidden");
+                }, 400);
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Failed to connect to backend server. Make sure it's running.");
+                loadingIndicator.classList.add("hidden");
+                loadingIndicator.classList.remove("flex");
+                if (waitingState) waitingState.classList.remove("hidden");
+                
+                // Revert right panel width on error
+                rightPanel.classList.remove("lg:w-80", "xl:w-96");
+                rightPanel.classList.add("lg:w-48", "xl:w-64");
+            });
+        });
+    </script>
+</body>
+</html>

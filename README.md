@@ -2,19 +2,19 @@
 
 A comprehensive machine learning project for detecting fraudulent transactions in a mobile money transfer system (PaySim).
 
-## 🚀 Features
+## Features
 
 - **End-to-End Solution**: From data preprocessing to model deployment
 - **Advanced Machine Learning**: Implements Random Forest, XGBoost, and Logistic Regression
 - **Interactive Dashboard**: Real-time fraud detection with visualization
 - **Containerized Deployment**: Ready to run with Docker
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Python** 3.8 or higher
 - **Docker** (optional, for containerized deployment)
 
-## 🛠️ Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
@@ -33,7 +33,7 @@ A comprehensive machine learning project for detecting fraudulent transactions i
    pip install -r requirements.txt
    ```
 
-## 🏃 Usage
+## Usage
 
 ### Run the Application
 
@@ -62,7 +62,7 @@ To retrain the machine learning model with the full dataset:
 python train_model.py
 ```
 
-## 📊 Features
+## Features
 
 ### Interactive Dashboard
 - **Transaction Simulation**: Test the system with custom transaction data
@@ -74,7 +74,7 @@ python train_model.py
 - **XGBoost**: Gradient boosting for high accuracy
 - **Logistic Regression**: Baseline model for comparison
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 Fraud_detection_paysim/
@@ -105,7 +105,7 @@ The project uses the **PaySim dataset**, a collection of simulated mobile money 
 - **Features**: 10 features including transaction type, amount, and customer details
 - **Target**: `isFraud` (binary classification)
 
-## 💻 Development
+## Development
 
 ### Adding New Features
 
@@ -122,23 +122,23 @@ To run the application tests:
 python -m unittest test_*.py
 ```
 
-## 🔐 Security
+## Security
 
 - **Do not commit** `.venv` or `__pycache__` directories
 - **Credentials**: Keep sensitive information out of version control
 
-## 🤝 Contributing
+## Contributing
 
 1. Create a feature branch: `git checkout -b feature/AmazingFeature`
 2. Commit your changes: `git commit -m 'Add some AmazingFeature'`
 3. Push to the branch: `git push origin feature/AmazingFeature`
 4. Open a Pull Request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Contact
+## Contact
 
 For support or questions:
 - **Email**: [EMAIL_ADDRESS]`
@@ -146,4 +146,4 @@ For support or questions:
 
 ---
 
-*Built with ❤️ using Python, Flask, and Machine Learning*
+*Built with love using Python, Flask, and Machine Learning*

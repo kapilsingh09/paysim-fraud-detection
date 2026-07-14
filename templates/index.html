@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
@@ -27,7 +30,9 @@
       --text-dim: #334155;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       background-color: var(--bg);
@@ -36,8 +41,13 @@
       min-height: 100vh;
     }
 
-    .font-display { font-family: 'Space Grotesk', sans-serif; }
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
 
     /* Grid noise texture */
     body::before {
@@ -45,14 +55,17 @@
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(79,125,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(79,125,255,0.03) 1px, transparent 1px);
+        linear-gradient(rgba(79, 125, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 125, 255, 0.03) 1px, transparent 1px);
       background-size: 40px 40px;
       pointer-events: none;
       z-index: 0;
     }
 
-    .z1 { position: relative; z-index: 1; }
+    .z1 {
+      position: relative;
+      z-index: 1;
+    }
 
     /* Glowing orb */
     .hero-orb {
@@ -61,7 +74,7 @@
       right: -200px;
       width: 600px;
       height: 600px;
-      background: radial-gradient(circle, rgba(79,125,255,0.07) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(79, 125, 255, 0.07) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -74,7 +87,9 @@
       transition: border-color 0.2s;
     }
 
-    .card:hover { border-color: #2a3a5a; }
+    .card:hover {
+      border-color: #2a3a5a;
+    }
 
     /* Inputs */
     .field-input {
@@ -95,7 +110,9 @@
       box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
-    .field-input::placeholder { color: var(--text-dim); }
+    .field-input::placeholder {
+      color: var(--text-dim);
+    }
 
     select.field-input option {
       background: var(--surface2);
@@ -120,12 +137,12 @@
 
     .pill-fraud {
       background: var(--danger-glow);
-      border-color: rgba(255,77,109,0.3);
+      border-color: rgba(255, 77, 109, 0.3);
       color: #ff8099;
     }
 
     .pill-fraud:hover {
-      background: rgba(255,77,109,0.25);
+      background: rgba(255, 77, 109, 0.25);
       border-color: var(--danger);
       color: #fff;
       box-shadow: 0 0 12px var(--danger-glow);
@@ -133,12 +150,12 @@
 
     .pill-safe {
       background: var(--safe-glow);
-      border-color: rgba(34,211,165,0.3);
+      border-color: rgba(34, 211, 165, 0.3);
       color: #5ee7c7;
     }
 
     .pill-safe:hover {
-      background: rgba(34,211,165,0.2);
+      background: rgba(34, 211, 165, 0.2);
       border-color: var(--safe);
       color: #fff;
       box-shadow: 0 0 12px var(--safe-glow);
@@ -161,17 +178,20 @@
       justify-content: center;
       gap: 8px;
       transition: all 0.2s;
-      box-shadow: 0 4px 20px rgba(79,125,255,0.3);
+      box-shadow: 0 4px 20px rgba(79, 125, 255, 0.3);
       letter-spacing: 0.02em;
     }
 
     .submit-btn:hover {
       background: #6b93ff;
-      box-shadow: 0 6px 28px rgba(79,125,255,0.45);
+      box-shadow: 0 6px 28px rgba(79, 125, 255, 0.45);
       transform: translateY(-1px);
     }
 
-    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
     .submit-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
@@ -212,12 +232,16 @@
       height: 60px;
       border-radius: 50%;
       border: 2px solid var(--border);
-      border-bottom-color: rgba(79,125,255,0.5);
+      border-bottom-color: rgba(79, 125, 255, 0.5);
       animation: spin 0.7s linear infinite reverse;
       position: absolute;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     .loading-steps span {
       animation: fadeInUp 0.4s ease forwards;
@@ -225,8 +249,15 @@
     }
 
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Risk meter */
@@ -246,11 +277,20 @@
 
     /* Result pulse effect */
     @keyframes resultPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,109,0.0); }
-      50% { box-shadow: 0 0 30px 4px rgba(255,77,109,0.15); }
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.0);
+      }
+
+      50% {
+        box-shadow: 0 0 30px 4px rgba(255, 77, 109, 0.15);
+      }
     }
 
-    .fraud-pulse { animation: resultPulse 2s ease infinite; }
+    .fraud-pulse {
+      animation: resultPulse 2s ease infinite;
+    }
 
     /* Section divider */
     .section-label {
@@ -286,8 +326,8 @@
 
     /* Tooltip badge */
     .tooltip-note {
-      background: rgba(79,125,255,0.08);
-      border: 1px solid rgba(79,125,255,0.2);
+      background: rgba(79, 125, 255, 0.08);
+      border: 1px solid rgba(79, 125, 255, 0.2);
       border-radius: 8px;
       padding: 10px 14px;
       font-size: 12px;
@@ -307,18 +347,37 @@
     }
 
     @keyframes scanAnim {
-      0% { top: 0; opacity: 1; }
-      90% { opacity: 1; }
-      100% { top: 100%; opacity: 0; }
+      0% {
+        top: 0;
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        top: 100%;
+        opacity: 0;
+      }
     }
 
     /* Number count-up */
     @keyframes countUp {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
-    .result-number { animation: countUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .result-number {
+      animation: countUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
 
     /* Signal dots header */
     .signal-dot {
@@ -330,14 +389,30 @@
     }
 
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
     }
 
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
 
     label {
       display: block;
@@ -360,12 +435,13 @@
       font-size: 11px;
       padding: 2px 8px;
       border-radius: 4px;
-      background: rgba(79,125,255,0.1);
+      background: rgba(79, 125, 255, 0.1);
       color: var(--accent);
-      border: 1px solid rgba(79,125,255,0.2);
+      border: 1px solid rgba(79, 125, 255, 0.2);
     }
   </style>
 </head>
+
 <body>
 
   <!-- Background orb -->
@@ -391,18 +467,22 @@
   </div>
 
   <!-- Header -->
-  <header class="z1 sticky top-0" style="background:rgba(11,13,20,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);">
+  <header class="z1 sticky top-0"
+    style="background:rgba(11,13,20,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div style="background:var(--accent);border-radius:10px;padding:8px 10px;box-shadow:0 0 20px rgba(79,125,255,0.4);">
+        <div
+          style="background:var(--accent);border-radius:10px;padding:8px 10px;box-shadow:0 0 20px rgba(79,125,255,0.4);">
           <i class="fa-solid fa-shield-halved text-white text-lg"></i>
         </div>
         <div>
-          <h1 class="font-display font-bold text-lg tracking-tight" style="color:var(--text);">Sentinel<span style="color:var(--accent);">AI</span></h1>
+          <h1 class="font-display font-bold text-lg tracking-tight" style="color:var(--text);">Sentinel<span
+              style="color:var(--accent);">AI</span></h1>
           <p class="font-mono text-xs" style="color:var(--text-muted);">Fraud Detection System</p>
         </div>
       </div>
-      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full" style="background:var(--safe-glow);border:1px solid rgba(34,211,165,0.2);">
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full"
+        style="background:var(--safe-glow);border:1px solid rgba(34,211,165,0.2);">
         <div class="signal-dot"></div>
         <span class="font-mono text-xs" style="color:var(--safe);">Model Online</span>
       </div>
@@ -415,11 +495,13 @@
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div>
           <h2 class="font-display font-bold text-xl" style="color:var(--text);">Transaction Risk Analyzer</h2>
-          <p style="color:var(--text-muted);font-size:13px;">Trained on <span class="type-badge">PaySim</span> synthetic financial dataset · 6.3M+ transactions · 99.2% accuracy</p>
+          <p style="color:var(--text-muted);font-size:13px;">Trained on <span class="type-badge">PaySim</span> synthetic
+            financial dataset · 6.3M+ transactions · 99.2% accuracy</p>
         </div>
         <div class="tooltip-note" style="max-width:340px;">
           <i class="fa-solid fa-circle-info mt-0.5 shrink-0" style="color:var(--accent);"></i>
-          <span>This tool detects fraud patterns. Not a substitute for official bank investigation. <strong style="color:var(--text);">Demo use only.</strong></span>
+          <span>This tool detects fraud patterns. Not a substitute for official bank investigation. <strong
+              style="color:var(--text);">Demo use only.</strong></span>
         </div>
       </div>
     </div>
@@ -433,8 +515,10 @@
 
       <!-- Sample scenarios -->
       <div class="mb-6">
-        <div class="section-label"><i class="fa-solid fa-flask" style="color:var(--accent);"></i> PaySim Test Scenarios</div>
-        <p style="color:var(--text-muted);font-size:12px;margin-bottom:10px;">Click any scenario to auto-fill with real PaySim-style data. Red = known fraud, Green = legitimate.</p>
+        <div class="section-label"><i class="fa-solid fa-flask" style="color:var(--accent);"></i> PaySim Test Scenarios
+        </div>
+        <p style="color:var(--text-muted);font-size:12px;margin-bottom:10px;">Click any scenario to auto-fill with real
+          PaySim-style data. Red = known fraud, Green = legitimate.</p>
         <div class="flex flex-wrap gap-2">
           <!-- FRAUD scenarios -->
           <button class="scenario-pill pill-fraud" onclick="loadScenario('fraud1')">
@@ -465,7 +549,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
           <div>
             <label>Simulation Step <span class="hint">(hour 1–743)</span></label>
-            <input class="field-input" type="number" id="step" name="step" value="1" min="1" max="743" placeholder="e.g. 187" />
+            <input class="field-input" type="number" id="step" name="step" value="1" min="1" max="743"
+              placeholder="e.g. 187" />
             <p class="mt-1 text-xs" style="color:var(--text-dim);">1 step = 1 hour in PaySim simulation</p>
           </div>
           <div>
@@ -477,7 +562,8 @@
               <option value="DEBIT">DEBIT — Direct debit from account</option>
               <option value="CASH_IN">CASH_IN — Deposit from agent</option>
             </select>
-            <p class="mt-1 text-xs" style="color:var(--text-dim);">⚠ Fraud only occurs in TRANSFER & CASH_OUT in PaySim</p>
+            <p class="mt-1 text-xs" style="color:var(--text-dim);">⚠ Fraud only occurs in TRANSFER & CASH_OUT in PaySim
+            </p>
           </div>
         </div>
 
@@ -485,51 +571,66 @@
         <div class="mb-5">
           <label>Transaction Amount <span class="hint">(USD)</span></label>
           <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
-            <input class="field-input" style="padding-left:28px;" type="number" id="amount" name="amount" step="0.01" placeholder="0.00" />
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm"
+              style="color:var(--text-muted);">$</span>
+            <input class="field-input" style="padding-left:28px;" type="number" id="amount" name="amount" step="0.01"
+              placeholder="0.00" />
           </div>
-          <p class="mt-1 text-xs" style="color:var(--text-dim);">PaySim range: $0.01 – $10,000,000+. Large round amounts are a red flag.</p>
+          <p class="mt-1 text-xs" style="color:var(--text-dim);">PaySim range: $0.01 – $10,000,000+. Large round amounts
+            are a red flag.</p>
         </div>
 
         <!-- Origin -->
-        <div class="section-label"><i class="fa-solid fa-arrow-right-from-bracket" style="color:#f59e0b;"></i> Origin Account</div>
+        <div class="section-label"><i class="fa-solid fa-arrow-right-from-bracket" style="color:#f59e0b;"></i> Origin
+          Account</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
           <div>
             <label>Balance Before Transaction</label>
             <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
-              <input class="field-input" style="padding-left:28px;" type="number" id="oldbalanceOrg" name="oldbalanceOrg" step="0.01" placeholder="0.00" />
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm"
+                style="color:var(--text-muted);">$</span>
+              <input class="field-input" style="padding-left:28px;" type="number" id="oldbalanceOrg"
+                name="oldbalanceOrg" step="0.01" placeholder="0.00" />
             </div>
             <p class="mt-1 text-xs" style="color:var(--text-dim);">The sender's balance before this transaction</p>
           </div>
           <div>
             <label>Balance After Transaction</label>
             <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
-              <input class="field-input" style="padding-left:28px;" type="number" id="newbalanceOrig" name="newbalanceOrig" step="0.01" placeholder="0.00" />
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm"
+                style="color:var(--text-muted);">$</span>
+              <input class="field-input" style="padding-left:28px;" type="number" id="newbalanceOrig"
+                name="newbalanceOrig" step="0.01" placeholder="0.00" />
             </div>
-            <p class="mt-1 text-xs" style="color:var(--text-dim);">Fraud flag: balance stays non-zero when it should be $0.00</p>
+            <p class="mt-1 text-xs" style="color:var(--text-dim);">Fraud flag: balance stays non-zero when it should be
+              $0.00</p>
           </div>
         </div>
 
         <!-- Destination -->
-        <div class="section-label"><i class="fa-solid fa-arrow-right-to-bracket" style="color:#6366f1;"></i> Destination Account</div>
+        <div class="section-label"><i class="fa-solid fa-arrow-right-to-bracket" style="color:#6366f1;"></i> Destination
+          Account</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7">
           <div>
             <label>Balance Before Transaction</label>
             <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
-              <input class="field-input" style="padding-left:28px;" type="number" id="oldbalanceDest" name="oldbalanceDest" step="0.01" placeholder="0.00" />
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm"
+                style="color:var(--text-muted);">$</span>
+              <input class="field-input" style="padding-left:28px;" type="number" id="oldbalanceDest"
+                name="oldbalanceDest" step="0.01" placeholder="0.00" />
             </div>
             <p class="mt-1 text-xs" style="color:var(--text-dim);">Destination's balance before receiving funds</p>
           </div>
           <div>
             <label>Balance After Transaction</label>
             <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
-              <input class="field-input" style="padding-left:28px;" type="number" id="newbalanceDest" name="newbalanceDest" step="0.01" placeholder="0.00" />
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm"
+                style="color:var(--text-muted);">$</span>
+              <input class="field-input" style="padding-left:28px;" type="number" id="newbalanceDest"
+                name="newbalanceDest" step="0.01" placeholder="0.00" />
             </div>
-            <p class="mt-1 text-xs" style="color:var(--text-dim);">Fraud flag: destination balance doesn't increase as expected</p>
+            <p class="mt-1 text-xs" style="color:var(--text-dim);">Fraud flag: destination balance doesn't increase as
+              expected</p>
           </div>
         </div>
 
@@ -544,15 +645,18 @@
 
       <!-- Result card -->
       <div class="card p-6 flex-1" id="resultCard" style="min-height:320px;">
-        <div class="section-label"><i class="fa-solid fa-chart-pie" style="color:var(--accent);"></i> Assessment Result</div>
+        <div class="section-label"><i class="fa-solid fa-chart-pie" style="color:var(--accent);"></i> Assessment Result
+        </div>
 
         <!-- Placeholder -->
         <div id="placeholderView" class="flex flex-col items-center justify-center py-12 text-center gap-3">
-          <div style="width:64px;height:64px;background:var(--surface2);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">
+          <div
+            style="width:64px;height:64px;background:var(--surface2);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">
             <i class="fa-solid fa-satellite-dish text-2xl" style="color:var(--text-dim);"></i>
           </div>
           <p class="font-display font-semibold" style="color:var(--text);">Awaiting scan...</p>
-          <p class="text-xs px-4" style="color:var(--text-muted);">Load a test scenario or enter your own transaction details, then click <strong>Run Fraud Analysis</strong>.</p>
+          <p class="text-xs px-4" style="color:var(--text-muted);">Load a test scenario or enter your own transaction
+            details, then click <strong>Run Fraud Analysis</strong>.</p>
         </div>
 
         <!-- Result view -->
@@ -599,24 +703,30 @@
         <div class="section-label"><i class="fa-solid fa-book-open" style="color:var(--accent);"></i> How It Works</div>
         <div class="space-y-3">
           <div class="flex gap-3 items-start">
-            <div class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold" style="background:var(--surface2);color:var(--accent);border:1px solid var(--border);">1</div>
+            <div class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold"
+              style="background:var(--surface2);color:var(--accent);border:1px solid var(--border);">1</div>
             <div>
               <p class="font-display font-semibold text-sm" style="color:var(--text);">Feature Extraction</p>
-              <p class="text-xs mt-0.5" style="color:var(--text-muted);">Balance deltas, type encoding, and amount ratios are computed.</p>
+              <p class="text-xs mt-0.5" style="color:var(--text-muted);">Balance deltas, type encoding, and amount
+                ratios are computed.</p>
             </div>
           </div>
           <div class="flex gap-3 items-start">
-            <div class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold" style="background:var(--surface2);color:var(--accent);border:1px solid var(--border);">2</div>
+            <div class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold"
+              style="background:var(--surface2);color:var(--accent);border:1px solid var(--border);">2</div>
             <div>
               <p class="font-display font-semibold text-sm" style="color:var(--text);">Random Forest Inference</p>
-              <p class="text-xs mt-0.5" style="color:var(--text-muted);">100-tree ensemble votes on the transaction using PaySim patterns.</p>
+              <p class="text-xs mt-0.5" style="color:var(--text-muted);">100-tree ensemble votes on the transaction
+                using PaySim patterns.</p>
             </div>
           </div>
           <div class="flex gap-3 items-start">
-            <div class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold" style="background:var(--surface2);color:var(--accent);border:1px solid var(--border);">3</div>
+            <div class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold"
+              style="background:var(--surface2);color:var(--accent);border:1px solid var(--border);">3</div>
             <div>
               <p class="font-display font-semibold text-sm" style="color:var(--text);">Risk Score Output</p>
-              <p class="text-xs mt-0.5" style="color:var(--text-muted);">Fraud probability (0–100%) and verdict are returned via Flask API.</p>
+              <p class="text-xs mt-0.5" style="color:var(--text-muted);">Fraud probability (0–100%) and verdict are
+                returned via Flask API.</p>
             </div>
           </div>
         </div>
@@ -628,7 +738,8 @@
   <!-- Footer -->
   <footer class="z1 border-t py-5 px-6" style="border-color:var(--border);">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-      <p class="font-mono text-xs" style="color:var(--text-dim);">© 2026 SentinelAI · Built with PaySim Dataset · For educational use</p>
+      <p class="font-mono text-xs" style="color:var(--text-dim);">© 2026 SentinelAI · Built with PaySim Dataset · For
+        educational use</p>
       <div class="flex items-center gap-4">
         <span class="text-xs flex items-center gap-1.5" style="color:var(--text-dim);">
           <i class="fa-solid fa-lock"></i> Local inference only
@@ -745,11 +856,11 @@
     function getFlags(data) {
       const flags = [];
       const amount = parseFloat(document.getElementById('amount').value) || 0;
-      const oldOrg  = parseFloat(document.getElementById('oldbalanceOrg').value) || 0;
-      const newOrg  = parseFloat(document.getElementById('newbalanceOrig').value) || 0;
+      const oldOrg = parseFloat(document.getElementById('oldbalanceOrg').value) || 0;
+      const newOrg = parseFloat(document.getElementById('newbalanceOrig').value) || 0;
       const oldDest = parseFloat(document.getElementById('oldbalanceDest').value) || 0;
       const newDest = parseFloat(document.getElementById('newbalanceDest').value) || 0;
-      const type    = document.getElementById('type').value;
+      const type = document.getElementById('type').value;
 
       if (newOrg === 0 && oldOrg > 0) flags.push({ icon: 'fa-triangle-exclamation', color: '#ff4d6d', text: 'Origin account fully drained to $0' });
       if (newDest === oldDest && amount > 0 && (type === 'TRANSFER')) flags.push({ icon: 'fa-triangle-exclamation', color: '#ff4d6d', text: 'Destination balance unchanged after transfer' });
@@ -763,7 +874,7 @@
 
     /* ===== Submit handler ===== */
     async function handleSubmit() {
-      const fields = ['step','amount','oldbalanceOrg','newbalanceOrig','oldbalanceDest','newbalanceDest'];
+      const fields = ['step', 'amount', 'oldbalanceOrg', 'newbalanceOrig', 'oldbalanceDest', 'newbalanceDest'];
       for (const f of fields) {
         if (!document.getElementById(f).value) {
           document.getElementById(f).focus();
@@ -808,12 +919,12 @@
 
     function renderResult(data) {
       const placeholder = document.getElementById('placeholderView');
-      const resultView  = document.getElementById('resultView');
-      const resultCard  = document.getElementById('resultCard');
-      const verdictBox  = document.getElementById('verdictBox');
+      const resultView = document.getElementById('resultView');
+      const resultCard = document.getElementById('resultCard');
+      const verdictBox = document.getElementById('verdictBox');
       const riskPercent = document.getElementById('riskPercent');
       const riskBarFill = document.getElementById('riskBarFill');
-      const flagsBox    = document.getElementById('flagsBox');
+      const flagsBox = document.getElementById('flagsBox');
 
       placeholder.classList.add('hidden');
       resultView.classList.remove('hidden');
@@ -865,4 +976,5 @@
     }
   </script>
 </body>
+
 </html>

@@ -10,7 +10,6 @@ BASE_DIR = Path(__file__).resolve().parent
 MODEL_PATH = BASE_DIR / 'fraud_model.pkl'
 FEATURE_COLUMNS_PATH = BASE_DIR / 'feature_columns.pkl'
 
-# Load your model and saved training feature names safely
 model = None
 final_columns = []
 
@@ -78,10 +77,15 @@ def predict_fraud(new_data_df, model):
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    """Render the main dashboard page."""
+    return render_template('alternative_index2.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    """
+    API endpoint to handle fraud prediction requests.
+    Expects form data from the client, processes it, and returns the prediction result.
+    """
     if model is None:
         return jsonify({'success': False, 'error': 'Model is not available. Check the project files.'}), 500
 
