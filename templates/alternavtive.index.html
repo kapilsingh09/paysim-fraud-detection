@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseShield AI - Real-time Fraud Detection Engine</title>
+    <!-- Tailwind CSS (v4) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Font Awesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Plus Jakarta Sans for premium Fintech look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50/50 min-h-screen text-slate-800 antialiased flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/80 py-4 px-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-indigo-100 flex items-center justify-center">
+                    <i class="fa-solid fa-fingerprint text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-slate-950">PulseShield<span class="text-indigo-600">.ai</span></h1>
+                    <p class="text-[10px] text-slate-500 font-bold tracking-wider uppercase">Next-Gen Transaction Behavioral Analytics</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Core Engine Active
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Workspace -->
+    <main class="max-w-7xl w-full mx-auto p-4 md:p-8 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Quick Fills & Form (8 Cols) -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Quick Test Scenarios -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-indigo-500"></i> Speed Testing Templates
+                    </h3>
+                    <span class="text-[11px] text-slate-400">Click a scenario to auto-populate fields</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Safe Scenario Button -->
+                    <button type="button" onclick="populateExample('safe')" class="flex items-start gap-3 p-3 bg-slate-50 hover:bg-emerald-50/50 border border-slate-200 hover:border-emerald-200 rounded-xl transition text-left group cursor-pointer">
+                        <span class="p-2 bg-emerald-100 text-emerald-700 rounded-lg group-hover:bg-emerald-200 transition mt-0.5">
+                            <i class="fa-solid fa-shield-halved text-sm"></i>
+                        </span>
+                        <div>
+                            <p class="font-semibold text-sm text-slate-900">Load Safe Scenario</p>
+                            <p class="text-xs text-slate-500">Standard low-amount retail payment signature.</p>
+                        </div>
+                    </button>
+                    <!-- Fraud Scenario Button -->
+                    <button type="button" onclick="populateExample('fraud')" class="flex items-start gap-3 p-3 bg-slate-50 hover:bg-rose-50/50 border border-slate-200 hover:border-rose-200 rounded-xl transition text-left group cursor-pointer">
+                        <span class="p-2 bg-rose-100 text-rose-700 rounded-lg group-hover:bg-rose-200 transition mt-0.5">
+                            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                        </span>
+                        <div>
+                            <p class="font-semibold text-sm text-slate-900">Load Scam/Fraud Scenario</p>
+                            <p class="text-xs text-slate-500">Total balance drainage via TRANSFER logic.</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Input Form Container -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
+                <h2 class="text-lg font-bold text-slate-950 mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-indigo-600"></i> Transaction Audit Parameters
+                </h2>
+                
+                <form id="predictionForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Step / Hour Input -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Simulation Step <span class="text-slate-400 font-normal">(Hour index, e.g., 1-744)</span></label>
+                            <div class="relative">
+                                <i class="fa-regular fa-clock absolute left-4 top-3.5 text-slate-400"></i>
+                                <input type="number" name="step" id="input_step" value="12" min="1" required class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:bg-white focus:border-indigo-600 outline-none transition font-medium">
+                            </div>
+                        </div>
+
+                        <!-- Transaction Type Select -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Transaction Mechanism</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-wallet absolute left-4 top-3.5 text-slate-400"></i>
+                                <select name="type" id="input_type" required class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:bg-white focus:border-indigo-600 outline-none transition font-semibold appearance-none">
+                                    <option value="TRANSFER">TRANSFER (External Routing)</option>
+                                    <option value="CASH_OUT">CASH_OUT (Atm/Withdrawal)</option>
+                                    <option value="PAYMENT">PAYMENT (Merchant Purchase)</option>
+                                    <option value="DEBIT">DEBIT (Account Transfer)</option>
+                                    <option value="CASH_IN">CASH_IN (Deposit)</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-4 top-4 text-slate-400 pointer-events-none text-xs"></i>
+                            </div>
+                        </div>
+
+                        <!-- Amount Input -->
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Transaction Value ($ USD)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 font-bold text-lg text-slate-400">$</span>
+                                <input type="number" name="amount" id="input_amount" step="0.01" placeholder="0.00" required class="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:bg-white focus:border-indigo-600 outline-none transition text-xl font-bold tracking-tight text-slate-900">
+                            </div>
+                        </div>
+
+                        <!-- Origin Account Divider -->
+                        <div class="border-t border-slate-100 pt-4 md:col-span-2">
+                            <h3 class="text-xs font-bold text-indigo-600 uppercase tracking-wider flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span> Originating Party (Sender)
+                            </h3>
+                        </div>
+
+                        <!-- Old Balance Org -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-2">Pre-Transaction Balance</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-slate-400 text-sm">$</span>
+                                <input type="number" name="oldbalanceOrg" id="input_oldbalanceOrg" step="0.01" placeholder="0.00" required class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:bg-white outline-none transition font-medium">
+                            </div>
+                        </div>
+
+                        <!-- New Balance Org -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-2">Post-Transaction Balance</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-slate-400 text-sm">$</span>
+                                <input type="number" name="newbalanceOrig" id="input_newbalanceOrig" step="0.01" placeholder="0.00" required class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:bg-white outline-none transition font-medium">
+                            </div>
+                        </div>
+
+                        <!-- Destination Account Divider -->
+                        <div class="border-t border-slate-100 pt-4 md:col-span-2">
+                            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Destination Party (Recipient)
+                            </h3>
+                        </div>
+
+                        <!-- Old Balance Dest -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-2">Pre-Transaction Balance</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-slate-400 text-sm">$</span>
+                                <input type="number" name="oldbalanceDest" id="input_oldbalanceDest" step="0.01" placeholder="0.00" required class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:bg-white outline-none transition font-medium">
+                            </div>
+                        </div>
+
+                        <!-- New Balance Dest -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-2">Post-Transaction Balance</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-slate-400 text-sm">$</span>
+                                <input type="number" name="newbalanceDest" id="input_newbalanceDest" step="0.01" placeholder="0.00" required class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:bg-white outline-none transition font-medium">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-xl transition duration-200 shadow-md shadow-indigo-100 flex items-center justify-center gap-2 cursor-pointer text-sm tracking-wide mt-4">
+                        <i class="fa-solid fa-bolt-lightning"></i> Compute Security Profile
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Column: Results & Security Indicators (4 Cols) -->
+        <div class="lg:col-span-4 flex flex-col gap-6">
+            
+            <!-- Real-time Assessment Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between min-h-[420px] relative overflow-hidden">
+                <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <i class="fa-solid fa-chart-line text-indigo-600"></i> AI Assessment Node
+                </h2>
+
+                <!-- State 1: Awaiting Inputs -->
+                <div id="placeholderView" class="flex flex-col items-center text-center py-12 text-slate-400 my-auto">
+                    <div class="w-16 h-16 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mb-4 text-slate-300">
+                        <i class="fa-solid fa-server text-2xl"></i>
+                    </div>
+                    <p class="font-semibold text-sm text-slate-700">Awaiting Signal Engine</p>
+                    <p class="text-xs px-6 mt-1 text-slate-400 leading-relaxed">Provide transaction parameters or select a test template above to verify vectors.</p>
+                </div>
+
+                <!-- State 2: Simulated Loading Screen (Hidden by default) -->
+                <div id="loadingView" class="hidden flex flex-col items-center text-center py-12 my-auto space-y-4">
+                    <div class="relative w-14 h-14">
+                        <div class="absolute inset-0 rounded-full border-4 border-slate-100"></div>
+                        <div class="absolute inset-0 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin"></div>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-sm text-slate-800">Processing Isolation Pipeline...</p>
+                        <p class="text-[11px] text-slate-400 px-4 mt-1 font-mono tracking-tight">evaluating delta thresholds & behavioral maps</p>
+                    </div>
+                </div>
+
+                <!-- State 3: Assessment Verdict (Hidden by default) -->
+                <div id="resultView" class="hidden my-auto space-y-6 py-4">
+                    <div class="text-center">
+                        <span id="badge" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-extrabold uppercase tracking-wider border">
+                            <i id="badgeIcon" class="fa-solid"></i> <span id="badgeText"></span>
+                        </span>
+                    </div>
+
+                    <div class="bg-slate-50/80 rounded-xl p-5 border border-slate-200/60 text-center relative">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Empirical Risk Probability</p>
+                        <div class="text-5xl font-black tracking-tight text-slate-900 font-mono">
+                            <span id="riskScore">0</span><span class="text-xl text-slate-400 ml-0.5">%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Text Alert explaining context -->
+                    <div id="verdictExplanation" class="text-xs rounded-xl p-3.5 border leading-relaxed">
+                        <!-- Filled dynamically by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Card Static Footer Metadata -->
+                <div class="border-t border-slate-100 pt-4 text-[11px] text-slate-400 flex items-center justify-between font-mono">
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-lock text-slate-300"></i> Local Inference</span>
+                    <span>v2.4-stable</span>
+                </div>
+            </div>
+
+            <!-- Behavioral Scam Identifiers Reference Card -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-2xl p-6 shadow-sm space-y-4">
+                <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-brain"></i> Threat Knowledge Base
+                </h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Financial fraud algorithms look at structural anomalies rather than just amounts.
+                </p>
+                
+                <div class="space-y-3 pt-2 border-t border-slate-800">
+                    <div class="flex gap-3">
+                        <i class="fa-solid fa-ban text-rose-400 mt-1 text-xs shrink-0"></i>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-200">What constitutes a Scam Profile?</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                                A high-value <code class="bg-slate-800 px-1 text-rose-300 rounded">TRANSFER</code> that empties the source account exactly to <code class="font-bold text-white">$0.00</code>, immediately paired with an equivalent downstream <code class="bg-slate-800 px-1 text-rose-300 rounded">CASH_OUT</code>.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 pt-1">
+                        <i class="fa-solid fa-circle-check text-emerald-400 mt-1 text-xs shrink-0"></i>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-200">What keeps it Safe?</h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                                Natural merchant <code class="bg-slate-800 px-1 text-emerald-300 rounded">PAYMENT</code> actions or small regular debits where the sender account retains fallback liquid funds.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Global Layout System Footer -->
+    <footer class="text-center py-6 text-[11px] text-slate-400 font-medium border-t border-slate-200/60 bg-white mt-12">
+        &copy; 2026 PulseShield AI Platform. Operational Security Guardrails Applied.
+    </footer>
+
+    <!-- Logic Engine, Quick Fills and Loading States -->
+    <script>
+        /**
+         * Contextual Template Examples Dictionary
+         */
+        const templates = {
+            safe: {
+                step: 32,
+                type: 'PAYMENT',
+                amount: 84.50,
+                oldbalanceOrg: 1250.00,
+                newbalanceOrig: 1165.50,
+                oldbalanceDest: 0.00,
+                newbalanceDest: 0.00
+            },
+            fraud: {
+                step: 142,
+                type: 'TRANSFER',
+                amount: 250000.00,
+                oldbalanceOrg: 250000.00,
+                newbalanceOrig: 0.00,
+                oldbalanceDest: 12400.00,
+                newbalanceDest: 262400.00
+            }
+        };
+
+        /**
+         * Helper function to fill form values instantly
+         */
+        function populateExample(key) {
+            const data = templates[key];
+            if (!data) return;
+
+            document.getElementById('input_step').value = data.step;
+            document.getElementById('input_type').value = data.type;
+            document.getElementById('input_amount').value = data.amount;
+            document.getElementById('input_oldbalanceOrg').value = data.oldbalanceOrg;
+            document.getElementById('input_newbalanceOrig').value = data.newbalanceOrig;
+            document.getElementById('input_oldbalanceDest').value = data.oldbalanceDest;
+            document.getElementById('input_newbalanceDest').value = data.newbalanceDest;
+
+            // Reset result view states to prompt fresh evaluation click
+            document.getElementById('placeholderView').classList.remove('hidden');
+            document.getElementById('loadingView').classList.add('hidden');
+            document.getElementById('resultView').classList.add('hidden');
+        }
+
+        /**
+         * Form Interception Pipeline with simulated state engine patience loading
+         */
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            const placeholderView = document.getElementById('placeholderView');
+            const loadingView = document.getElementById('loadingView');
+            const resultView = document.getElementById('resultView');
+            
+            const badge = document.getElementById('badge');
+            const badgeIcon = document.getElementById('badgeIcon');
+            const badgeText = document.getElementById('badgeText');
+            const riskScore = document.getElementById('riskScore');
+            const explanation = document.getElementById('verdictExplanation');
+
+            // Step A: Trigger Loading Screen State
+            placeholderView.classList.add('hidden');
+            resultView.classList.add('hidden');
+            loadingView.classList.remove('hidden');
+
+            try {
+                // Enforce a deliberate minimum execution cooldown for UX processing pacing
+                const networkPromise = fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                const delayPromise = new Promise(resolve => setTimeout(resolve, 850));
+
+                // Wait for both response network delivery and UI cadence delay
+                const [response] = await Promise.all([networkPromise, delayPromise]);
+                const data = await response.json();
+                
+                // Tear down loading state
+                loadingView.classList.add('hidden');
+
+                if (data.success) {
+                    resultView.classList.remove('hidden');
+                    riskScore.textContent = data.risk_score;
+
+                    if (data.is_fraud) {
+                        // High Risk Scam State Layout Architecture
+                        badge.className = "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider bg-rose-50 text-rose-700 border-rose-200 animate-pulse";
+                        badgeIcon.className = "fa-solid fa-triangle-exclamation";
+                        badgeText.textContent = "High Risk / Scam Vector Detected";
+                        
+                        explanation.className = "text-xs rounded-xl p-3.5 border bg-rose-50/40 border-rose-200/60 text-rose-800";
+                        explanation.innerHTML = `<i class="fa-solid fa-circle-info mr-1"></i> <strong>Critical Anomaly Profile:</strong> This transaction mimics traditional identity-theft drainage logic. The full drainage of source assets via <span class="font-mono bg-white px-1 border rounded">${formData.get('type')}</span> mechanisms signals an unauthorized account takeover pattern. Security hold recommended.`;
+                    } else {
+                        // Clear Clean Transaction State Layout Architecture
+                        badge.className = "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border-emerald-200";
+                        badgeIcon.className = "fa-solid fa-circle-check";
+                        badgeText.textContent = "Transaction Safe / Verified";
+                        
+                        explanation.className = "text-xs rounded-xl p-3.5 border bg-emerald-50/40 border-emerald-200/60 text-emerald-800";
+                        explanation.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> <strong>Standard Behavioral Signal:</strong> Values line up cleanly with expected organic consumer velocity curves. The remaining liquid asset cushion and typical parameter variances suggest no current exploit vectors.`;
+                    }
+                } else {
+                    placeholderView.classList.remove('hidden');
+                    alert('Backend pipeline encountered parameters exceptions: ' + data.error);
+                }
+            } catch (err) {
+                loadingView.classList.add('hidden');
+                placeholderView.classList.remove('hidden');
+                alert('An error occurred executing the prediction server loop. Please verify your Python Flask pipeline server is running locally.');
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>

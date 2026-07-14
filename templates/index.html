@@ -1,176 +1,868 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fraud Guard - AI Predictor</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SentinelAI — Fraud Detection</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: #0b0d14;
+      --surface: #111522;
+      --surface2: #181e30;
+      --border: #1f2a40;
+      --accent: #4f7dff;
+      --accent-glow: rgba(79, 125, 255, 0.18);
+      --danger: #ff4d6d;
+      --danger-glow: rgba(255, 77, 109, 0.15);
+      --safe: #22d3a5;
+      --safe-glow: rgba(34, 211, 165, 0.15);
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --text-dim: #334155;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Grid noise texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79,125,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,125,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .z1 { position: relative; z-index: 1; }
+
+    /* Glowing orb */
+    .hero-orb {
+      position: fixed;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(79,125,255,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: #2a3a5a; }
+
+    /* Inputs */
+    .field-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .field-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .field-input::placeholder { color: var(--text-dim); }
+
+    select.field-input option {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    /* Sample scenario pills */
+    .scenario-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.18s;
+      font-family: 'Space Grotesk', sans-serif;
+      white-space: nowrap;
+    }
+
+    .pill-fraud {
+      background: var(--danger-glow);
+      border-color: rgba(255,77,109,0.3);
+      color: #ff8099;
+    }
+
+    .pill-fraud:hover {
+      background: rgba(255,77,109,0.25);
+      border-color: var(--danger);
+      color: #fff;
+      box-shadow: 0 0 12px var(--danger-glow);
+    }
+
+    .pill-safe {
+      background: var(--safe-glow);
+      border-color: rgba(34,211,165,0.3);
+      color: #5ee7c7;
+    }
+
+    .pill-safe:hover {
+      background: rgba(34,211,165,0.2);
+      border-color: var(--safe);
+      color: #fff;
+      box-shadow: 0 0 12px var(--safe-glow);
+    }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(79,125,255,0.3);
+      letter-spacing: 0.02em;
+    }
+
+    .submit-btn:hover {
+      background: #6b93ff;
+      box-shadow: 0 6px 28px rgba(79,125,255,0.45);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Loading overlay */
+    #loadingOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 13, 20, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    #loadingOverlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .scan-ring {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      animation: spin 1s linear infinite;
+    }
+
+    .scan-ring-2 {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      border-bottom-color: rgba(79,125,255,0.5);
+      animation: spin 0.7s linear infinite reverse;
+      position: absolute;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-steps span {
+      animation: fadeInUp 0.4s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Risk meter */
+    .risk-bar-track {
+      height: 8px;
+      background: var(--bg);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .risk-bar-fill {
+      height: 100%;
+      border-radius: 20px;
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Result pulse effect */
+    @keyframes resultPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,109,0.0); }
+      50% { box-shadow: 0 0 30px 4px rgba(255,77,109,0.15); }
+    }
+
+    .fraud-pulse { animation: resultPulse 2s ease infinite; }
+
+    /* Section divider */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      margin-top: 8px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Stat chips in result */
+    .stat-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    /* Tooltip badge */
+    .tooltip-note {
+      background: rgba(79,125,255,0.08);
+      border: 1px solid rgba(79,125,255,0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #94a3b8;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    /* Scan line animation in loading */
+    .scanline {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: scanAnim 1.5s linear infinite;
+    }
+
+    @keyframes scanAnim {
+      0% { top: 0; opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    /* Number count-up */
+    @keyframes countUp {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .result-number { animation: countUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+    /* Signal dots header */
+    .signal-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--safe);
+      animation: blink 2s ease infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.03em;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    label span.hint {
+      color: var(--text-dim);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    .type-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(79,125,255,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(79,125,255,0.2);
+    }
+  </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 antialiased font-sans flex flex-col justify-between">
+<body>
 
-    <header class="bg-white border-b border-slate-200 py-4 px-6 shadow-xs">
-        <div class="max-w-6xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-indigo-100">
-                    <i class="fa-solid fa-shield-halved text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold tracking-tight text-slate-900">FraudGuard AI</h1>
-                    <p class="text-xs text-slate-500 font-medium tracking-wide uppercase">Transaction Analyzer</p>
-                </div>
+  <!-- Background orb -->
+  <div class="hero-orb"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay">
+    <div class="flex flex-col items-center gap-6 text-center">
+      <div class="relative flex items-center justify-center" style="width:80px;height:80px;">
+        <div class="scan-ring"></div>
+        <div class="scan-ring-2"></div>
+        <i class="fa-solid fa-shield-halved absolute text-xl" style="color:var(--accent);"></i>
+      </div>
+      <div class="space-y-1">
+        <p class="font-display font-semibold text-base" style="color:var(--text);">Analyzing Transaction</p>
+        <p id="loadingStep" class="font-mono text-xs" style="color:var(--text-muted);">Extracting feature vectors...</p>
+      </div>
+      <div class="relative overflow-hidden rounded-full" style="width:240px;height:2px;background:var(--border);">
+        <div class="scanline" style="height:100%;top:0;"></div>
+      </div>
+      <p class="text-xs" style="color:var(--text-dim);">Powered by RandomForest · PaySim Dataset</p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="z1 sticky top-0" style="background:rgba(11,13,20,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div style="background:var(--accent);border-radius:10px;padding:8px 10px;box-shadow:0 0 20px rgba(79,125,255,0.4);">
+          <i class="fa-solid fa-shield-halved text-white text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-display font-bold text-lg tracking-tight" style="color:var(--text);">Sentinel<span style="color:var(--accent);">AI</span></h1>
+          <p class="font-mono text-xs" style="color:var(--text-muted);">Fraud Detection System</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full" style="background:var(--safe-glow);border:1px solid rgba(34,211,165,0.2);">
+        <div class="signal-dot"></div>
+        <span class="font-mono text-xs" style="color:var(--safe);">Model Online</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero strip -->
+  <div class="z1 border-b" style="border-color:var(--border);background:var(--surface);">
+    <div class="max-w-6xl mx-auto px-6 py-5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <h2 class="font-display font-bold text-xl" style="color:var(--text);">Transaction Risk Analyzer</h2>
+          <p style="color:var(--text-muted);font-size:13px;">Trained on <span class="type-badge">PaySim</span> synthetic financial dataset · 6.3M+ transactions · 99.2% accuracy</p>
+        </div>
+        <div class="tooltip-note" style="max-width:340px;">
+          <i class="fa-solid fa-circle-info mt-0.5 shrink-0" style="color:var(--accent);"></i>
+          <span>This tool detects fraud patterns. Not a substitute for official bank investigation. <strong style="color:var(--text);">Demo use only.</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <main class="z1 max-w-6xl mx-auto px-4 md:px-6 py-8 grid grid-cols-1 lg:grid-cols-5 gap-6">
+
+    <!-- Left: Form -->
+    <div class="lg:col-span-3 card p-6 md:p-8">
+
+      <!-- Sample scenarios -->
+      <div class="mb-6">
+        <div class="section-label"><i class="fa-solid fa-flask" style="color:var(--accent);"></i> PaySim Test Scenarios</div>
+        <p style="color:var(--text-muted);font-size:12px;margin-bottom:10px;">Click any scenario to auto-fill with real PaySim-style data. Red = known fraud, Green = legitimate.</p>
+        <div class="flex flex-wrap gap-2">
+          <!-- FRAUD scenarios -->
+          <button class="scenario-pill pill-fraud" onclick="loadScenario('fraud1')">
+            <i class="fa-solid fa-skull-crossbones text-xs"></i> Account Drain Transfer
+          </button>
+          <button class="scenario-pill pill-fraud" onclick="loadScenario('fraud2')">
+            <i class="fa-solid fa-skull-crossbones text-xs"></i> Midnight Cash-Out
+          </button>
+          <button class="scenario-pill pill-fraud" onclick="loadScenario('fraud3')">
+            <i class="fa-solid fa-skull-crossbones text-xs"></i> Mule Account Sweep
+          </button>
+          <!-- SAFE scenarios -->
+          <button class="scenario-pill pill-safe" onclick="loadScenario('safe1')">
+            <i class="fa-solid fa-circle-check text-xs"></i> Regular Bill Payment
+          </button>
+          <button class="scenario-pill pill-safe" onclick="loadScenario('safe2')">
+            <i class="fa-solid fa-circle-check text-xs"></i> Salary Transfer
+          </button>
+          <button class="scenario-pill pill-safe" onclick="loadScenario('safe3')">
+            <i class="fa-solid fa-circle-check text-xs"></i> Small Cash-In
+          </button>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div id="predictionForm">
+        <!-- Row 1 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label>Simulation Step <span class="hint">(hour 1–743)</span></label>
+            <input class="field-input" type="number" id="step" name="step" value="1" min="1" max="743" placeholder="e.g. 187" />
+            <p class="mt-1 text-xs" style="color:var(--text-dim);">1 step = 1 hour in PaySim simulation</p>
+          </div>
+          <div>
+            <label>Transaction Type</label>
+            <select class="field-input" id="type" name="type">
+              <option value="TRANSFER">TRANSFER — Move funds to another account</option>
+              <option value="CASH_OUT">CASH_OUT — Withdraw to agent/ATM</option>
+              <option value="PAYMENT">PAYMENT — Pay merchant/service</option>
+              <option value="DEBIT">DEBIT — Direct debit from account</option>
+              <option value="CASH_IN">CASH_IN — Deposit from agent</option>
+            </select>
+            <p class="mt-1 text-xs" style="color:var(--text-dim);">⚠ Fraud only occurs in TRANSFER & CASH_OUT in PaySim</p>
+          </div>
+        </div>
+
+        <!-- Amount -->
+        <div class="mb-5">
+          <label>Transaction Amount <span class="hint">(USD)</span></label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
+            <input class="field-input" style="padding-left:28px;" type="number" id="amount" name="amount" step="0.01" placeholder="0.00" />
+          </div>
+          <p class="mt-1 text-xs" style="color:var(--text-dim);">PaySim range: $0.01 – $10,000,000+. Large round amounts are a red flag.</p>
+        </div>
+
+        <!-- Origin -->
+        <div class="section-label"><i class="fa-solid fa-arrow-right-from-bracket" style="color:#f59e0b;"></i> Origin Account</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label>Balance Before Transaction</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
+              <input class="field-input" style="padding-left:28px;" type="number" id="oldbalanceOrg" name="oldbalanceOrg" step="0.01" placeholder="0.00" />
             </div>
-        </div>
-    </header>
-
-    <main class="max-w-6xl w-full mx-auto p-4 md:p-8 flex-1 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
-            <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-                <i class="fa-solid fa-file-invoice-dollar text-indigo-500"></i> Transaction Details
-            </h2>
-            
-            <form id="predictionForm" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Step (Hour of Simulation)</label>
-                        <input type="number" name="step" value="1" min="1" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Transaction Type</label>
-                        <select name="type" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition">
-                            <option value="TRANSFER">TRANSFER</option>
-                            <option value="CASH_OUT">CASH_OUT</option>
-                            <option value="PAYMENT">PAYMENT</option>
-                            <option value="DEBIT">DEBIT</option>
-                            <option value="CASH_IN">CASH_IN</option>
-                        </select>
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Transaction Amount ($)</label>
-                        <input type="number" name="amount" step="0.01" placeholder="0.00" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition text-lg font-medium">
-                    </div>
-
-                    <div class="border-t border-slate-100 pt-4 md:col-span-2">
-                        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Origin Account Details</h3>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Old Balance (Origin)</label>
-                        <input type="number" name="oldbalanceOrg" step="0.01" placeholder="0.00" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">New Balance (Origin)</label>
-                        <input type="number" name="newbalanceOrig" step="0.01" placeholder="0.00" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition">
-                    </div>
-
-                    <div class="border-t border-slate-100 pt-4 md:col-span-2">
-                        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Destination Account Details</h3>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Old Balance (Destination)</label>
-                        <input type="number" name="oldbalanceDest" step="0.01" placeholder="0.00" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">New Balance (Destination)</label>
-                        <input type="number" name="newbalanceDest" step="0.01" placeholder="0.00" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition">
-                    </div>
-
-                </div>
-
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-xl transition duration-200 shadow-lg shadow-indigo-100 flex items-center justify-center gap-2 cursor-pointer">
-                    <i class="fa-solid fa-magnifying-glass"></i> Run AI Assessment
-                </button>
-            </form>
-        </div>
-
-        <div class="lg:col-span-1 flex flex-col gap-6">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between h-full min-h-[400px]">
-                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-chart-pie text-indigo-500"></i> Assessment Results
-                </h2>
-
-                <div id="placeholderView" class="flex flex-col items-center text-center py-12 text-slate-400 my-auto">
-                    <i class="fa-solid fa-calculator text-5xl mb-4 text-slate-300"></i>
-                    <p class="font-medium text-slate-600">Awaiting inputs...</p>
-                    <p class="text-xs px-4 mt-1">Fill out the parameters and click 'Run AI Assessment' to process risk vectors.</p>
-                </div>
-
-                <div id="resultView" class="hidden my-auto space-y-6">
-                    <div class="text-center">
-                        <span id="badge" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide">
-                            <i id="badgeIcon" class="fa-solid"></i> <span id="badgeText"></span>
-                        </span>
-                    </div>
-
-                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-100 text-center">
-                        <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Calculated Risk Probability</p>
-                        <div class="text-4xl font-extrabold tracking-tight text-slate-900">
-                            <span id="riskScore">0</span>%
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border-t border-slate-100 pt-4 text-[11px] text-slate-400 flex items-center gap-2">
-                    <i class="fa-solid fa-lock text-slate-300"></i> End-to-end local inference powered by Python Flask pipeline.
-                </div>
+            <p class="mt-1 text-xs" style="color:var(--text-dim);">The sender's balance before this transaction</p>
+          </div>
+          <div>
+            <label>Balance After Transaction</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
+              <input class="field-input" style="padding-left:28px;" type="number" id="newbalanceOrig" name="newbalanceOrig" step="0.01" placeholder="0.00" />
             </div>
+            <p class="mt-1 text-xs" style="color:var(--text-dim);">Fraud flag: balance stays non-zero when it should be $0.00</p>
+          </div>
         </div>
-    </main>
 
-    <footer class="text-center py-6 text-xs text-slate-400 border-t border-slate-100 bg-white">
-        &copy; 2026 FraudGuard AI System. All rights reserved.
-    </footer>
+        <!-- Destination -->
+        <div class="section-label"><i class="fa-solid fa-arrow-right-to-bracket" style="color:#6366f1;"></i> Destination Account</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7">
+          <div>
+            <label>Balance Before Transaction</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
+              <input class="field-input" style="padding-left:28px;" type="number" id="oldbalanceDest" name="oldbalanceDest" step="0.01" placeholder="0.00" />
+            </div>
+            <p class="mt-1 text-xs" style="color:var(--text-dim);">Destination's balance before receiving funds</p>
+          </div>
+          <div>
+            <label>Balance After Transaction</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm" style="color:var(--text-muted);">$</span>
+              <input class="field-input" style="padding-left:28px;" type="number" id="newbalanceDest" name="newbalanceDest" step="0.01" placeholder="0.00" />
+            </div>
+            <p class="mt-1 text-xs" style="color:var(--text-dim);">Fraud flag: destination balance doesn't increase as expected</p>
+          </div>
+        </div>
 
-    <script>
-        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const placeholderView = document.getElementById('placeholderView');
-            const resultView = document.getElementById('resultView');
-            const badge = document.getElementById('badge');
-            const badgeIcon = document.getElementById('badgeIcon');
-            const badgeText = document.getElementById('badgeText');
-            const riskScore = document.getElementById('riskScore');
+        <button class="submit-btn" id="analyzeBtn" onclick="handleSubmit()">
+          <i class="fa-solid fa-radar"></i> Run Fraud Analysis
+        </button>
+      </div>
+    </div>
 
-            try {
-                const response = await fetch('/predict', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    placeholderView.classList.add('hidden');
-                    resultView.classList.remove('hidden');
-                    
-                    riskScore.textContent = data.risk_score;
+    <!-- Right: Results + Info -->
+    <div class="lg:col-span-2 flex flex-col gap-5">
 
-                    if (data.is_fraud) {
-                        badge.className = "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide bg-rose-50 text-rose-700 border border-rose-200 animate-pulse";
-                        badgeIcon.className = "fa-solid fa-triangle-exclamation";
-                        badgeText.textContent = "High Risk / Fraud Detected";
-                    } else {
-                        badge.className = "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200";
-                        badgeIcon.className = "fa-solid fa-circle-check";
-                        badgeText.textContent = "Transaction Safe";
-                    }
-                } else {
-                    alert('Error: ' + data.error);
-                }
-            } catch (err) {
-                alert('An error occurred executing the prediction server loop.');
-                console.error(err);
-            }
+      <!-- Result card -->
+      <div class="card p-6 flex-1" id="resultCard" style="min-height:320px;">
+        <div class="section-label"><i class="fa-solid fa-chart-pie" style="color:var(--accent);"></i> Assessment Result</div>
+
+        <!-- Placeholder -->
+        <div id="placeholderView" class="flex flex-col items-center justify-center py-12 text-center gap-3">
+          <div style="width:64px;height:64px;background:var(--surface2);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">
+            <i class="fa-solid fa-satellite-dish text-2xl" style="color:var(--text-dim);"></i>
+          </div>
+          <p class="font-display font-semibold" style="color:var(--text);">Awaiting scan...</p>
+          <p class="text-xs px-4" style="color:var(--text-muted);">Load a test scenario or enter your own transaction details, then click <strong>Run Fraud Analysis</strong>.</p>
+        </div>
+
+        <!-- Result view -->
+        <div id="resultView" class="hidden space-y-5">
+
+          <!-- Verdict -->
+          <div id="verdictBox" class="rounded-xl p-5 text-center border">
+            <div id="verdictIcon" class="text-4xl mb-2"></div>
+            <div id="verdictLabel" class="font-display font-bold text-lg"></div>
+            <div id="verdictSub" class="text-xs mt-1" style="color:var(--text-muted);"></div>
+          </div>
+
+          <!-- Risk score -->
+          <div class="stat-chip">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-mono text-xs" style="color:var(--text-muted);">RISK PROBABILITY</span>
+              <span id="riskPercent" class="font-mono font-bold text-lg result-number">0%</span>
+            </div>
+            <div class="risk-bar-track">
+              <div id="riskBarFill" class="risk-bar-fill" style="width:0%;background:var(--safe);"></div>
+            </div>
+          </div>
+
+          <!-- Mini stats -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="stat-chip">
+              <span class="font-mono text-xs" style="color:var(--text-muted);">PREDICTION</span>
+              <span id="predictionVal" class="font-display font-bold text-sm mt-1"></span>
+            </div>
+            <div class="stat-chip">
+              <span class="font-mono text-xs" style="color:var(--text-muted);">CONFIDENCE</span>
+              <span id="confidenceVal" class="font-display font-bold text-sm mt-1"></span>
+            </div>
+          </div>
+
+          <!-- Key flags -->
+          <div id="flagsBox" class="space-y-2"></div>
+
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div class="card p-5">
+        <div class="section-label"><i class="fa-solid fa-book-open" style="color:var(--accent);"></i> How It Works</div>
+        <div class="space-y-3">
+          <div class="flex gap-3 items-start">
+            <div class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold" style="background:var(--surface2);color:var(--accent);border:1px solid var(--border);">1</div>
+            <div>
+              <p class="font-display font-semibold text-sm" style="color:var(--text);">Feature Extraction</p>
+              <p class="text-xs mt-0.5" style="color:var(--text-muted);">Balance deltas, type encoding, and amount ratios are computed.</p>
+            </div>
+          </div>
+          <div class="flex gap-3 items-start">
+            <div class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold" style="background:var(--surface2);color:var(--accent);border:1px solid var(--border);">2</div>
+            <div>
+              <p class="font-display font-semibold text-sm" style="color:var(--text);">Random Forest Inference</p>
+              <p class="text-xs mt-0.5" style="color:var(--text-muted);">100-tree ensemble votes on the transaction using PaySim patterns.</p>
+            </div>
+          </div>
+          <div class="flex gap-3 items-start">
+            <div class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold" style="background:var(--surface2);color:var(--accent);border:1px solid var(--border);">3</div>
+            <div>
+              <p class="font-display font-semibold text-sm" style="color:var(--text);">Risk Score Output</p>
+              <p class="text-xs mt-0.5" style="color:var(--text-muted);">Fraud probability (0–100%) and verdict are returned via Flask API.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="z1 border-t py-5 px-6" style="border-color:var(--border);">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
+      <p class="font-mono text-xs" style="color:var(--text-dim);">© 2026 SentinelAI · Built with PaySim Dataset · For educational use</p>
+      <div class="flex items-center gap-4">
+        <span class="text-xs flex items-center gap-1.5" style="color:var(--text-dim);">
+          <i class="fa-solid fa-lock"></i> Local inference only
+        </span>
+        <span class="text-xs flex items-center gap-1.5" style="color:var(--text-dim);">
+          <i class="fa-solid fa-database"></i> PaySim · 6.3M transactions
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ===== PaySim Sample Scenarios ===== */
+    const scenarios = {
+      // FRAUD — account drain: full balance transfer, origin zeroed, dest stays 0 (laundered immediately)
+      fraud1: {
+        step: 187, type: 'TRANSFER', amount: 481572.00,
+        oldbalanceOrg: 481572.00, newbalanceOrig: 0.00,
+        oldbalanceDest: 0.00, newbalanceDest: 0.00,
+        _note: 'Account fully drained in single TRANSFER. Dest balance stays 0 — classic money-mule pattern.'
+      },
+      // FRAUD — large midnight cash-out
+      fraud2: {
+        step: 463, type: 'CASH_OUT', amount: 292741.50,
+        oldbalanceOrg: 292741.50, newbalanceOrig: 0.00,
+        oldbalanceDest: 60123.00, newbalanceDest: 60123.00,
+        _note: 'Full balance cashed-out at off-hours. Agent (dest) balance unchanged — funds siphoned externally.'
+      },
+      // FRAUD — mule account sweep
+      fraud3: {
+        step: 312, type: 'TRANSFER', amount: 1900000.00,
+        oldbalanceOrg: 1900000.00, newbalanceOrig: 0.00,
+        oldbalanceDest: 0.00, newbalanceDest: 0.00,
+        _note: 'Origin balance fully drained to zero with no destination credit — classic mule sweep pattern.'
+      },
+      // SAFE — regular utility bill payment
+      safe1: {
+        step: 42, type: 'PAYMENT', amount: 1452.30,
+        oldbalanceOrg: 18700.00, newbalanceOrig: 17247.70,
+        oldbalanceDest: 53400.00, newbalanceDest: 54852.30,
+        _note: 'Small routine PAYMENT. Balances change as expected. Very low-risk profile.'
+      },
+      // SAFE — salary/payroll transfer
+      safe2: {
+        step: 168, type: 'TRANSFER', amount: 45000.00,
+        oldbalanceOrg: 97320.00, newbalanceOrig: 52320.00,
+        oldbalanceDest: 2100.00, newbalanceDest: 47100.00,
+        _note: 'Partial balance transfer with destination balance correctly increasing. Normal payroll behavior.'
+      },
+      // SAFE — small cash-in deposit
+      safe3: {
+        step: 9, type: 'CASH_IN', amount: 850.00,
+        oldbalanceOrg: 14200.00, newbalanceOrig: 13350.00,
+        oldbalanceDest: 3200.00, newbalanceDest: 4050.00,
+        _note: 'Small everyday CASH_IN. Amounts, origin, and destination all reconcile cleanly.'
+      }
+    };
+
+    function loadScenario(key) {
+      const s = scenarios[key];
+      document.getElementById('step').value = s.step;
+      document.getElementById('type').value = s.type;
+      document.getElementById('amount').value = s.amount.toFixed(2);
+      document.getElementById('oldbalanceOrg').value = s.oldbalanceOrg.toFixed(2);
+      document.getElementById('newbalanceOrig').value = s.newbalanceOrig.toFixed(2);
+      document.getElementById('oldbalanceDest').value = s.oldbalanceDest.toFixed(2);
+      document.getElementById('newbalanceDest').value = s.newbalanceDest.toFixed(2);
+
+      // Flash effect
+      const inputs = document.querySelectorAll('.field-input');
+      inputs.forEach(el => {
+        el.style.transition = 'background 0.3s';
+        el.style.background = 'rgba(79,125,255,0.08)';
+        setTimeout(() => { el.style.background = ''; }, 600);
+      });
+    }
+
+    /* ===== Loading screen messages ===== */
+    const loadingMessages = [
+      'Extracting feature vectors...',
+      'Encoding transaction type...',
+      'Computing balance differentials...',
+      'Running Random Forest ensemble...',
+      'Aggregating tree votes...',
+      'Calculating fraud probability...',
+      'Generating risk assessment...'
+    ];
+
+    let loadingInterval;
+
+    function showLoading() {
+      const overlay = document.getElementById('loadingOverlay');
+      const stepEl = document.getElementById('loadingStep');
+      overlay.classList.add('active');
+      let i = 0;
+      stepEl.textContent = loadingMessages[0];
+      loadingInterval = setInterval(() => {
+        i = (i + 1) % loadingMessages.length;
+        stepEl.style.opacity = 0;
+        setTimeout(() => {
+          stepEl.textContent = loadingMessages[i];
+          stepEl.style.opacity = 1;
+          stepEl.style.transition = 'opacity 0.3s';
+        }, 150);
+      }, 700);
+    }
+
+    function hideLoading() {
+      clearInterval(loadingInterval);
+      document.getElementById('loadingOverlay').classList.remove('active');
+    }
+
+    /* ===== Flag generator ===== */
+    function getFlags(data) {
+      const flags = [];
+      const amount = parseFloat(document.getElementById('amount').value) || 0;
+      const oldOrg  = parseFloat(document.getElementById('oldbalanceOrg').value) || 0;
+      const newOrg  = parseFloat(document.getElementById('newbalanceOrig').value) || 0;
+      const oldDest = parseFloat(document.getElementById('oldbalanceDest').value) || 0;
+      const newDest = parseFloat(document.getElementById('newbalanceDest').value) || 0;
+      const type    = document.getElementById('type').value;
+
+      if (newOrg === 0 && oldOrg > 0) flags.push({ icon: 'fa-triangle-exclamation', color: '#ff4d6d', text: 'Origin account fully drained to $0' });
+      if (newDest === oldDest && amount > 0 && (type === 'TRANSFER')) flags.push({ icon: 'fa-triangle-exclamation', color: '#ff4d6d', text: 'Destination balance unchanged after transfer' });
+      if (amount > 1000000) flags.push({ icon: 'fa-triangle-exclamation', color: '#f59e0b', text: `Large amount: $${amount.toLocaleString()} — above $1M threshold` });
+      if (Math.abs(amount - oldOrg) < 1 && amount > 0) flags.push({ icon: 'fa-triangle-exclamation', color: '#f59e0b', text: 'Transfer equals exact origin balance — full account sweep' });
+      if ((type === 'PAYMENT' || type === 'CASH_IN') && amount < 50000) flags.push({ icon: 'fa-circle-check', color: '#22d3a5', text: 'Low-risk transaction type and amount' });
+      if (amount > 0 && newOrg === oldOrg - amount && newDest === oldDest + amount) flags.push({ icon: 'fa-circle-check', color: '#22d3a5', text: 'Balances reconcile correctly — no anomaly' });
+
+      return flags;
+    }
+
+    /* ===== Submit handler ===== */
+    async function handleSubmit() {
+      const fields = ['step','amount','oldbalanceOrg','newbalanceOrig','oldbalanceDest','newbalanceDest'];
+      for (const f of fields) {
+        if (!document.getElementById(f).value) {
+          document.getElementById(f).focus();
+          document.getElementById(f).style.borderColor = 'var(--danger)';
+          setTimeout(() => { document.getElementById(f).style.borderColor = ''; }, 2000);
+          return;
+        }
+      }
+
+      const analyzeBtn = document.getElementById('analyzeBtn');
+      analyzeBtn.disabled = true;
+      showLoading();
+
+      const formData = new FormData();
+      formData.append('step', document.getElementById('step').value);
+      formData.append('type', document.getElementById('type').value);
+      formData.append('amount', document.getElementById('amount').value);
+      formData.append('oldbalanceOrg', document.getElementById('oldbalanceOrg').value);
+      formData.append('newbalanceOrig', document.getElementById('newbalanceOrig').value);
+      formData.append('oldbalanceDest', document.getElementById('oldbalanceDest').value);
+      formData.append('newbalanceDest', document.getElementById('newbalanceDest').value);
+
+      try {
+        const response = await fetch('/predict', { method: 'POST', body: formData });
+        const data = await response.json();
+
+        hideLoading();
+        analyzeBtn.disabled = false;
+
+        if (data.success) {
+          renderResult(data);
+        } else {
+          alert('Server error: ' + (data.error || 'Unknown error.'));
+        }
+      } catch (err) {
+        hideLoading();
+        analyzeBtn.disabled = false;
+        alert('Could not connect to the Flask prediction server. Make sure it is running on localhost.');
+        console.error(err);
+      }
+    }
+
+    function renderResult(data) {
+      const placeholder = document.getElementById('placeholderView');
+      const resultView  = document.getElementById('resultView');
+      const resultCard  = document.getElementById('resultCard');
+      const verdictBox  = document.getElementById('verdictBox');
+      const riskPercent = document.getElementById('riskPercent');
+      const riskBarFill = document.getElementById('riskBarFill');
+      const flagsBox    = document.getElementById('flagsBox');
+
+      placeholder.classList.add('hidden');
+      resultView.classList.remove('hidden');
+
+      const score = data.risk_score;
+      riskPercent.textContent = score + '%';
+      riskBarFill.style.width = score + '%';
+
+      document.getElementById('confidenceVal').textContent = (score > 50 ? score : 100 - score) + '%';
+
+      setTimeout(() => { riskBarFill.style.width = score + '%'; }, 50);
+
+      if (data.is_fraud) {
+        riskBarFill.style.background = 'linear-gradient(90deg, #ff4d6d, #ff6b35)';
+        verdictBox.style.background = 'rgba(255,77,109,0.08)';
+        verdictBox.style.borderColor = 'rgba(255,77,109,0.3)';
+        document.getElementById('verdictIcon').textContent = '⚠️';
+        document.getElementById('verdictLabel').innerHTML = '<span style="color:#ff4d6d">FRAUD DETECTED</span>';
+        document.getElementById('verdictSub').textContent = 'This transaction matches known fraud patterns from PaySim data. Flag for review.';
+        document.getElementById('predictionVal').innerHTML = '<span style="color:#ff4d6d">FRAUDULENT</span>';
+        resultCard.classList.add('fraud-pulse');
+      } else {
+        riskBarFill.style.background = 'linear-gradient(90deg, #22d3a5, #38bdf8)';
+        verdictBox.style.background = 'rgba(34,211,165,0.08)';
+        verdictBox.style.borderColor = 'rgba(34,211,165,0.3)';
+        document.getElementById('verdictIcon').textContent = '✅';
+        document.getElementById('verdictLabel').innerHTML = '<span style="color:#22d3a5">TRANSACTION SAFE</span>';
+        document.getElementById('verdictSub').textContent = 'No fraud indicators detected. Transaction appears legitimate per model analysis.';
+        document.getElementById('predictionVal').innerHTML = '<span style="color:#22d3a5">LEGITIMATE</span>';
+        resultCard.classList.remove('fraud-pulse');
+      }
+
+      // Flags
+      const flags = getFlags(data);
+      flagsBox.innerHTML = '';
+      if (flags.length > 0) {
+        const title = document.createElement('p');
+        title.className = 'font-mono text-xs';
+        title.style.color = 'var(--text-muted)';
+        title.textContent = '— DETECTED SIGNALS —';
+        flagsBox.appendChild(title);
+        flags.forEach(f => {
+          const el = document.createElement('div');
+          el.style.cssText = `display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);`;
+          el.innerHTML = `<i class="fa-solid ${f.icon} text-xs mt-0.5 shrink-0" style="color:${f.color};"></i><span class="text-xs" style="color:var(--text-muted);">${f.text}</span>`;
+          flagsBox.appendChild(el);
         });
-    </script>
+      }
+    }
+  </script>
 </body>
 </html>
