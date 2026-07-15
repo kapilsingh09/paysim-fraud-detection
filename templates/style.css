@@ -1,0 +1,56 @@
+/* ============================================
+   Custom CSS Variables & Styles
+   ============================================ */
+
+:root {
+    /* Color Variables */
+    --cream: #efebe0;
+    --doodle-yellow: #eab308;
+    --doodle-pink: #f472b6;
+    --doodle-green: #34d399;
+    --doodle-red: #f87171;
+    --doodle-blue: #38bdf8;
+    --paper-main: #ffffff;
+    --paper-ruled: #fbf9f1;
+    --gray-dark: #1f2937;
+    --gray-light: #94a3b8;
+    --border-color: #1f2937;
+}
+
+/* Notebook Grid Background */
+.notebook-grid {
+    background-color: var(--cream);
+    color: var(--gray-dark);
+}
+
+/* Doodle Border Style */
+.doodle-border {
+    border: 3px solid var(--border-color);
+}
+
+/* Doodle Shadow Effect */
+.doodle-shadow {
+    box-shadow: 6px 6px 0px var(--border-color);
+}
+
+/* Input Sketch Style */
+.input-sketch {
+    background: transparent;
+    border-bottom: 2px dashed var(--gray-light);
+    outline: none;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.05rem;
+    color: var(--gray-dark);
+    padding: 6px 10px;
+    transition: border-color 0.2s;
+}
+
+.input-sketch:focus {
+    border-bottom: 2px solid #3b82f6;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+select.input-sketch option {
+    background-color: #ffffff;
+    color: var(--gray-dark);
+}
